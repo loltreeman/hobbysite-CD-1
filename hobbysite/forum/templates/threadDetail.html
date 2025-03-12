@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Forum Threads: {{ thread.title }}{% endblock %}
+
+{% block content %}
+    <h1>
+        {{ thread.title }}
+    </h1>
+    <p>
+        <strong>Category:</strong> {{ thread.category.name }}
+    </p>
+    <p align="right">
+        <strong>Created on:</strong> {{ thread.createdOn }}  
+        <br>
+        <strong>Last updated:</strong> {{ thread.updatedOn }}
+    </p>
+    <hr>
+
+    {{ thread.entry|linebreaks }}
+
+    <a href="{% url 'forum:threadList' %}">← Back to All Threads</a>
+{% endblock %}
