@@ -1,11 +1,19 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}{{ article.title }}{% endblock %}
 {% block content %}
-  <h1>{{ article.title }}</h1>
-  <p>
-    Category: 
-    {% if article.category %}
-      {{ article.category.name }}
+<div>
+    {% if article %}
+    <div>
+        <div>
+            <h2>{{ article.title }}</h2>
+            <p><strong>Category:</strong> {{ article.category }}</p>
+            <div>{{ article.entry }}</div>
+            <p><small>Created on: {{ article.created_on }}</small></p>
+            <p><small>Last updated on: {{ article.updated_on }}</small></p>
+        </div>
+    </div>
     {% endif %}
-  </p>
-  <a href="{% url 'blog:article_list' %}">Go Back to Articles</a>
+    <a href="{% url 'blog:article_list' %}">Back to Articles</a>
+</div>
 {% endblock %}
