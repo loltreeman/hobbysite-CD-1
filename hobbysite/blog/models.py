@@ -16,6 +16,7 @@ class Article(models.Model):
     title = models.CharField(max_length=255)
     category = models.ForeignKey(ArticleCategory, on_delete=models.SET_NULL, null=True, related_name="article_category")
     entry = models.TextField()
+    image_url = models.CharField(max_length=500, blank=True, null=True)
     created_on = models.DateTimeField(auto_now_add=True, null=True)
     updated_on = models.DateTimeField(auto_now=True, null=True)
 
