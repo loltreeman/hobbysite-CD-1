@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>{{ article.title }}</h1>
+  <p>
+    Category: 
+    {% if article.category %}
+      {{ article.category.name }}
+    {% endif %}
+  </p>
+  <a href="{% url 'blog:article_list' %}">Go Back to Articles</a>
+{% endblock %}
