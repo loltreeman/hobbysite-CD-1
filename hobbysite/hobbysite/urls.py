@@ -23,4 +23,5 @@ urlpatterns = [
     path('blog/', include('blog.urls')),
     path('merchstore/', include("merchstore.urls")),
     path('commissions/', include('commissions.urls')),
+    path('wiki/', include('wiki.urls'))
 ]

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Online Wiki App{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #000;
+            color: #fff;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            --s: 200px;
+            --c1: #1d1d1d;
+            --c2: #4e4f51;
+            --c3: #3c3c3c;
+
+            background: repeating-conic-gradient(
+                    from 30deg,
+                    #0000 0 120deg,
+                    var(--c3) 0 180deg
+                )
+                calc(0.5 * var(--s)) calc(0.5 * var(--s) * 0.577),
+                repeating-conic-gradient(
+                from 30deg,
+                var(--c1) 0 60deg,
+                var(--c2) 0 120deg,
+                var(--c3) 0 180deg
+                );
+            background-size: var(--s) calc(var(--s) * 0.577);
+        }
+
+        header {
+            background-color: #111;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #333;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #111;
+            border: 1px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+            border-bottom: 1px solid #555;
+            transition: color 0.2s ease;
+        }
+
+        a:hover {
+            color: black;
+            border-bottom: 1px solid #aaa;
+        }
+
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            margin: 12px;
+            height: 50px;
+            width: 120px;
+            border-radius: 10px;
+            background: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow:
+                -5px -5px 15px #444,
+                5px 5px 15px #222,
+                inset 5px 5px 10px #444,
+                inset -5px -5px 10px #222;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            color: #a1a1a1;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            box-shadow:
+                -5px -5px 15px #444,
+                5px 5px 15px #222,
+                inset 5px 5px 10px #222,
+                inset -5px -5px 10px #444;
+            color: #d6d6d6;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background-color: #333;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{% block header %}{% endblock %}</h1>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

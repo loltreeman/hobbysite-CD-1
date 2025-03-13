@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}Articles{% endblock %}
+
+{% block content %}
+    {% for article in articles %}
+        <article>
+            <h3>{{ article.title }}</h3>
+            <p><strong>Category:</strong> {{ article.category }}</p>
+            <p>{{ article.entry|truncatewords:50 }}</p>
+            <a href="{% url 'wiki:article_detail' article.pk %}" class="btn btn-primary btn-sm">Read More</a>
+        </article>
+        <hr>
+    {% endfor %}
+{% endblock %}
