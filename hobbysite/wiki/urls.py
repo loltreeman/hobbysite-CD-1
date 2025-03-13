@@ -1,9 +1,11 @@
 from django.urls import path
-from .views import WikiListView, WikiDetailView
+from .views import ArticleListView, ArticleDetailView
+
 
 urlpatterns = [
-    path('/wiki/articles', WikiListView.as_view(), name="wikiList"),
-    path('/wiki/article/<int:pk>', WikiDetailView.as_view(), name="wikiDetail"),
+    path("articles/", ArticleListView.as_view(), name="articles_list"),
+    path("article/<int:pk>/", ArticleDetailView.as_view(), name="article_detail")
 ]
 
-app_name = 'wiki'
+
+app_name = "wiki"
