@@ -8,12 +8,9 @@
         {% for commission in commissions %}
             <li>
                 <a href="{% url 'commissions:commissions_detail' commission.pk %}">
-                    {{ commission.title}} | {{ commission.createdOn|date:"d-m-Y" }}
+                    {{ commission.title}} | {{ commission.created_on|date:"d-m-Y" }}
                 </a>
             </li>
-        
-        {% empty %}
-            <li>No commissions available.</li>
         {% endfor %}
     </ul>
 {% endblock %}
