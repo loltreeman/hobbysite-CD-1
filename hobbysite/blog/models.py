@@ -7,6 +7,8 @@ class ArticleCategory(models.Model):
 
     class Meta:
         ordering = ['name']
+        # Included so it appears as 'Article Category' instead of 'Article category' in some cases on the admin panel.
+        verbose_name = 'Article Category'
         verbose_name_plural = 'Article Categories'
 
     def __str__(self):
@@ -23,6 +25,9 @@ class Article(models.Model):
     # Articles should be sorted by the date it was created, in descending order
     class Meta:
         ordering = ['-created_on']
+        # Included so it appears as 'Article' instead of 'article' in some cases on the admin panel.
+        verbose_name = 'Article' 
+        verbose_name_plural = 'Articles'
 
     def __str__(self):
         return self.title
