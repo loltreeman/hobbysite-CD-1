@@ -23,8 +23,8 @@
                     <td style="padding: 10px;">
                         <a href="{% url 'forum:threadDetail' thread.id %}">{{ thread.title }}</a>
                     </td>
-                    <td style="padding: 10px; text-align: center;">{{ thread.createdOn }}</td>
-                    <td style="padding: 10px; text-align: center;">{{ thread.updatedOn }}</td>
+                    <td style="padding: 10px; text-align: center;">{{ thread.created_on }}</td>
+                    <td style="padding: 10px; text-align: center;">{{ thread.updated_on }}</td>
                 </tr>
                 {% endfor %}
             </tbody>
