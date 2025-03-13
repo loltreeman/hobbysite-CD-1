@@ -4,7 +4,7 @@ from .views import threadDetail, threadList
 
 urlpatterns = [
     path('threads/', threadList, name='threadList'),
-    path('thread/<int:threadId>/', threadDetail, name='threadDetail'),
+    path('thread/<int:thread_id>/', threadDetail, name='threadDetail'),
 ]
 
 
