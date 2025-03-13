@@ -1,11 +1,12 @@
+from django.contrib import admin
 from django.urls import path 
 from .views import merchList, merchDetail
 
 
-urlpatterns = [
-    path('items/', merchList, name='merch_list'),
-    path('item/<int:pk>', merchDetail, name='merch_detail')
-]
 
+urlpatterns = [
+    path('merchstore/items', merchList, name='merchlist'),
+    path('merchstore/item/<int:pk>', merchDetail, name='merchdetail')
+]
 
 app_name = "merchstore"

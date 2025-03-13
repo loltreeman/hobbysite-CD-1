@@ -1,14 +1,14 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Product
+from django.shortcuts import render
+from .models import Product, ProductType
 
 
 def merchList(request):
-    merch_types = Product.objects.all()
-    ctx = {"merch_types": merch_types} 
-    return render(request, "merch_list.html", ctx)
+    merchType = Product.objects.all().order_by('name')
+    ctx = {"merchType": merchType}
+    return render(request, "merchlist.html", ctx)
 
+def merchDetail(request,pk):
+    merch = Product.objects.get(pk=pk)
+    ctx = {"merch":merch}
+    return render(request,"merchdetail.html", ctx)
 
-def merchDetail(request, pk):
-    merch = get_object_or_404(Product, pk=pk)
-    ctx = {"merch": merch}
-    return render(request, "merch_detail.html", ctx)

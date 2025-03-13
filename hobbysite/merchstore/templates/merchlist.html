@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Merch Store{% endblock %}
+
+{% block content %}
+    <h1>Merch Store</h1>
+    <u1>
+        {% for merchType in merchType %}
+            <li>
+                <a href="{% url 'merchstore:merchdetail' merchType.pk %}">{{ merchType.name}}</a>  
+            </li>
+        {% endfor %}
+    </u1>
+{% endblock %}

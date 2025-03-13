@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>Article List</h1>
+    <ul>
+        {% for article in object_list %}
+        <li>
+            {% if article.image_url %}
+                <img src="{{ article.image_url }}" alt="{{ article.title }}" style="width: 150px; height: auto; object-fit: cover;">
+            {% endif %}
+            <br>
+            <a href="{{ article.get_absolute_url }}">{{ article.title }}</a> - {{ article.category }}
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
