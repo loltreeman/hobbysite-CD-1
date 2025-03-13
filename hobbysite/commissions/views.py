@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Commission
 
 def commissions_list(request):
-    commissions = Commission.objects.order_by('createdOn')
+    commissions = Commission.objects.all()
     ctx = {'commissions': commissions}
     return render(request, 'commissions_list.html', ctx)
 
