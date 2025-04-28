@@ -1,0 +1,16 @@
+{% extends 'base_merchStore.html' %}
+
+{% block title %}Merch Store{% endblock %}
+
+{% block content %}
+
+<h1>Cart</h1> 
+<u1>
+    {% for transaction in transactions %}
+        <li>{{transaction.product.name}} - {{transaction.amount}} pcs</li>
+        <li>{{transaction.status}}</li>
+
+</u1>
+{% endfor %}
+
+{% endblock %}
