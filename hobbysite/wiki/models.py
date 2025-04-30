@@ -17,8 +17,10 @@ class ArticleCategory(models.Model):
 
 class Article(models.Model):
     title = models.CharField(max_length=255)
-    category = models.ForeignKey(ArticleCategory, on_delete=models.SET_NULL, null=True, related_name='articles')
+    author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True, related_name='articles')
+    category = models.ForeignKey(ArticleCategory, on_delete=models.SET_NULL, null=True, related_name='articles', editable=False)
     entry = models.TextField()
+    header_image = models.ImageField(upload_to='article_headers/', null=True, blank=True)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
@@ -33,3 +35,18 @@ class Article(models.Model):
 
     def get_absolute_url(self):
         return reverse('wiki:article_detail', kwargs={'pk': self.pk})
+
+class Comment(models.Model):
+    author = models.ForeignKey('Profile', on_delete=models.SET_NULL, null=True, related_name='comments')
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='comments')
+    entry = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['created_on']
+        verbose_name = 'Comment'
+        verbose_name_plural = 'Comments'
+
+    def __str__(self):
+        return f"Comment by {self.author} on {self.article}"
