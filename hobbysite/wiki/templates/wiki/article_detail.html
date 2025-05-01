@@ -1,19 +1,60 @@
 {% extends 'base_wiki.html' %}
-{% load static %}
 
-{% block title %}{{ article.title }}{% endblock %}
+{% block title %} Wiki App - Detail {% endblock %}
 
-{% block header %}{{ article.title }}{% endblock header %}
 
 {% block content %}
-    <h3>{{ article.category }}</h3>
-    <hr>
-    <p>{{ article.entry }}</p>
-    <hr>
-    <p>Created on: {{ article.created_on }}</p>
-    <p>Updated on: {{ article.updated_on }}</p>
 
-    <div class="btn-container">
-        <a href="{% url 'wiki:articles_list' %}" class="btn">Back to Articles</a>
-    </div>
+
+    <h1> User: <b> {{ request.user.profile }} </b> </h1> <br>
+
+    <h1> Article Detail </h1>
+    <hr>
+    <h2> {{ article.title }} </h2>
+
+    {% if article.header_image %}
+        <img src = "{{ article.header_image.url}}" alt = "{{ article.title }}">
+    {% endif %}
+
+    <h2>Other Articles from {{ article.category }} </h2>
+        {% for article in object.category.articles.all %}
+            {% if article != object %}
+            <p>
+                <a href="{{ article.get_absolute_url }}">
+                {{ article.title }}
+                </a>
+            </p>
+            {% else %}
+            {% endif %}
+        {% endfor %}
+        
+
+    <p>
+        <b> Author: </b> {{ article.author.username }} <br>
+        <b> Article Created: </b> {{ article.created_on }} <br>
+        <b> Article Updated: </b> {{ article.updated_on }}
+    </p>
+
+    <hr>
+
+    <p> {{ article.entry }} </p>
+
+    {% if user.is_authenticated and user.profile == article.author %}
+        <a href="{% url 'wiki:article-update' article.pk %}" class="btn btn-primary"> Edit Article </a>
+    {% endif %}
+
+    <h2>Comments</h2>
+    {% for comment in all_comments %}
+        <p>{{ comment.entry }}</p>
+    {% empty %}
+        <p>No comments yet.</p>
+    {% endfor %}
+    <form method="post" action="">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit">Submit Comment</button>
+    </form>
+      <a href="{% url 'wiki:article-list' %}">Back to Article List</a>
+
+
 {% endblock %}

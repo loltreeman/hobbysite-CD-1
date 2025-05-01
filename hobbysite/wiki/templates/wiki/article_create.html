@@ -1,0 +1,32 @@
+{% extends 'base_wiki.html' %}
+
+{% block title %} Wiki App - Create {% endblock title %}
+
+{% block content %}
+    <h1> Create New Article </h1>
+
+    <form method = "post" enctype = "multipart/form-data">
+        {% csrf_token %}
+        
+        <label for = "id_title"> Title: </label><br>
+        <input type = "text" id = "id_title" name = "title"> <br><br>
+        
+        <label for = "id_category"> Category: </label><br>
+        <select name = "category" id = "id_category">
+            <option value = ""> Select a category </option>
+            {% for category in categories %}
+                <option value = "{{ category.id }}"> {{ category.name }} </option>
+            {% endfor %}
+        </select> <br><br>
+        
+        <label for = "id_entry"> Entry: </label><br>
+        <textarea id = "id_entry" name = "entry"> </textarea> <br><br>
+        
+        <label for = "id_header_image"> Header Image: </label><br>
+        <input type = "file" id = "id_header_image" name = "header_image"> <br><br>
+        
+        <button type = "submit" class = "btn btn-primary"> Submit </button>
+    </form>
+
+
+{% endblock %}
