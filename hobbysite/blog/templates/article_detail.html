@@ -1,19 +1,97 @@
 {% extends 'base_blog.html' %}
-{% load static %}
-{% block title %}{{ article.title }}{% endblock %}
+
 {% block content %}
-<div>
-    {% if article %}
-    <div>
-        <div>
-            <h2>{{ article.title }}</h2>
-            <p><strong>Category:</strong> {{ article.category }}</p>
-            <div>{{ article.entry }}</div>
-            <p><small>Created on: {{ article.created_on }}</small></p>
-            <p><small>Last updated on: {{ article.updated_on }}</small></p>
-        </div>
-    </div>
+<div class="d-flex justify-content-between align-items-center my-4">
+    <a href="{% url 'blog:article_list' %}" class="btn btn-link">&larr; Back</a>
+  
+    {% if edit_link %}
+      <a href="{% url 'blog:article_edit' article.pk %}" class="btn btn-outline-primary">Edit</a>
     {% endif %}
-    <a href="{% url 'blog:article_list' %}" class="btn btn-primary btn-sm">Back to Articles</a>
-</div>
+  </div>
+
+<div class="container my-5">
+  <h1 class="display-4 text-center mb-3">{{ object.title }}</h1>
+  <p class="text-muted text-center mb-4">By {{ object.author }} on {{ object.created_on }}</p>
+
+  {% if object.header_image %}
+    <img src="{{ object.header_image.url }}" alt="{{ object.title }}" class="img-fluid rounded mb-4">
+  {% endif %}
+
+  <div class="card mb-4">
+    <div class="card-body">
+      {{ object.entry|linebreaks }}
+    </div>
+  </div>
+
+  {% if user.is_authenticated and user == object.author %}
+    <div class="text-end mb-4">
+      <a href="{% url 'blog:article_edit' object.pk %}" class="btn btn-outline-primary">Edit Article</a>
+    </div>
+  {% endif %}
+
+  {% if article_images %}
+    <h3 class="mb-3">Image Gallery</h3>
+    <div class="row mb-4">
+      {% for image in article_images %}
+        <div class="col-md-4 mb-3">
+          <div class="card">
+            <img src="{{ image.image.url }}" class="card-img-top" alt="{{ image.caption }}">
+            {% if image.caption %}
+              <div class="card-body">
+                <p class="card-text text-center text-muted">{{ image.caption }}</p>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <h3>More from {{ object.author }}:</h3>
+  <ul class="list-group list-group-flush mb-4">
+    {% for art in related_articles %}
+      <li class="list-group-item">
+        <a href="{{ art.get_absolute_url }}" class="text-decoration-none">{{ art.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <h2 class="mb-3">Leave a Comment</h2>
+  {% if user.is_authenticated %}
+    <div class="card mb-4">
+      <div class="card-body">
+        <form method="post" enctype="multipart/form-data">{% csrf_token %}
+          {{ comment_form.as_p }}
+          <button type="submit" class="btn btn-primary">Post Comment</button>
+        </form>
+      </div>
+    </div>
+  {% else %}
+    <p class="text-center"><a href="{% url 'login' %}" class="btn btn-outline-secondary">Log in</a> to comment.</p>
+  {% endif %}
+
+  <h2 class="mb-3">Comments</h2>
+  <ul class="list-group mb-4">
+    {% for comment in comments %}
+      <li class="list-group-item">
+        <p class="mb-1"><strong>{{ comment.author }}</strong> <small class="text-muted">{{ comment.created_on }}</small></p>
+        <p class="mb-0">{{ comment.entry|linebreaks }}</p>
+      </li>
+    {% empty %}
+      <li class="list-group-item text-center">No comments yet.</li>
+    {% endfor %}
+  </ul>
+
+  <div class="d-flex justify-content-between align-items-center my-4">
+    {% if previous_article %}
+      <a href="{{ previous_article.get_absolute_url }}" class="btn btn-outline-secondary">&larr; Previous Article</a>
+    {% else %}
+      <span></span>
+    {% endif %}
+  
+    {% if next_article %}
+      <a href="{{ next_article.get_absolute_url }}" class="btn btn-outline-secondary">Next Article &rarr;</a>
+    {% endif %}
+  </div>
+  
 {% endblock %}

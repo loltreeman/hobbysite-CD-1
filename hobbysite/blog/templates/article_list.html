@@ -1,14 +1,23 @@
 {% extends 'base_blog.html' %}
+
 {% block content %}
 <div class="container">
     <h1 class="text-center mb-4">Article List</h1>
+
+    <!-- Button to Add Article -->
+    <div class="text-center mb-4">
+        <a href="{% url 'blog:article_add' %}" class="btn btn-primary">
+            Add New Article
+        </a>
+    </div>
+
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         {% for article in object_list %}
         <div class="col">
             <a href="{{ article.get_absolute_url }}" class="text-decoration-none text-dark">
                 <div class="card shadow-sm h-100">
-                    {% if article.image_url %}
-                        <img src="{{ article.image_url }}" class="card-img-top" alt="{{ article.title }}" style="height: 200px; object-fit: cover;">
+                    {% if article.header_image %}
+                        <img src="{{ article.header_image.url }}" class="card-img-top" alt="{{ article.title }}" style="height: 200px; object-fit: cover;">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ article.title }}</h5>
