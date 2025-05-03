@@ -15,8 +15,11 @@
             <li>Price: ${{ merch.price }}</li>
             <li>Stock: {{merch.stock}}</li>
             <li>Status: {{merch.status}}</li>
-            <li> <a href="{% url 'merchstore:merch_update' merch.pk %}"> Update</a></li>
+            {% if can_purchase == False %}
+             <a href="{% url 'merchstore:merch_update' merch.pk %}"> Update</a>
+            {% endif %}
             <br> 
+
 
             {% if can_purchase and merch.stock > 0 %}
             <form method="post">

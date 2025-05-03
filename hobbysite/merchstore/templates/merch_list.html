@@ -5,10 +5,21 @@
 {% block content %}
     <h1>Merch Store</h1>
     <ul>
-        {% for merch in merch_types %}
+
+        <h2>Your Products</h2>
+        {% for user_products in user_products %}
             <li>
-                <a href="{% url 'merchstore:merch_detail' merch.pk %}">{{ merch.name }}</a>
+                <a href="{% url 'merchstore:merch_detail' user_products.pk %}">{{ user_products.name }} </a> - {{user_products.status}}
             </li>
         {% endfor %}
+
+        <h2>Other Products</h2>
+        {% for other_products in other_products%}
+            <li> 
+                <a href="{% url 'merchstore:merch_detail' other_products.pk %}">{{ other_products.name }} </a> -  {{other_products.status}}
+            </li>
+        {% endfor %}
+        <br>
+        <a href="{% url 'merchstore:merch_create'%}">Create Product</a> 
     </ul>
 {% endblock %}
