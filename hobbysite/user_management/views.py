@@ -1,12 +1,13 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
-from django.urls import reverse
-
+from django.urls import reverse_lazy
+from .models import Profile
 from .forms import ProfileForm
+from django.contrib.auth.forms import UserCreationForm
 
 @login_required
 def profile_dashboard(request):
-    return render(request, 'user_management/profile_dashboard.html', {
+    return render(request, 'profile.html', {
         'user': request.user,
         'update_link': reverse_lazy('user_management:profile_update')
     })
@@ -19,10 +20,7 @@ def profile_update(request):
         if form.is_valid():
             form.save()
             return redirect('user_management:profile_dashboard')
-    return render(request, 'user_management/profile_update.html', {'form': form})
-
-# (Optional) A simple registration view if custom signup is needed
-from django.contrib.auth.forms import UserCreationForm
+    return render(request, 'profile_update.html', {'form': form})
 
 def register_view(request):
     form = UserCreationForm()
@@ -33,4 +31,5 @@ def register_view(request):
             # Automatically create associated profile
             Profile.objects.create(user=user, display_name=user.username)
             return redirect('login')
-    return render(request, 'user_management/register.html', {'form': form})
+    return render(request, 'register.html', {'form': form})
+
