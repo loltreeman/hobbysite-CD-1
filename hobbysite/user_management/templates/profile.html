@@ -1,9 +1,11 @@
-{% extends 'registration/base.html' %}
+{% extends 'base.html' %}
 
 {% block title %}Profile{% endblock %}
 {% block content %}
-<h2>Welcome, {{ user.profile.display_name }}</h2>
-<p>Username: {{ user.username }}</p>
-<p>Email: {{ user.email }}</p>
-<a href="{{ update_link }}">Edit Profile</a>
+<div class="w-50 mx-auto">
+  <h2>Welcome, {{ user.profile.display_name }}</h2>
+  <p><strong>Username:</strong> {{ user.username }}</p>
+  <p><strong>Email:</strong> {{ user.email }}</p>
+  <a href="{% url 'user_management:profile_update' %}" class="btn btn-outline-primary">Edit Profile</a>
+</div>
 {% endblock %}

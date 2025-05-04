@@ -124,7 +124,8 @@ USE_TZ = True
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 STATIC_URL = 'static/'
-LOGIN_REDIRECT_URL = "/blog/articles"
+LOGIN_URL = 'login'
+LOGIN_REDIRECT_URL = "user_management:homepage"
 LOGOUT_REDIRECT_URL = "/accounts/login"
 
 # Default primary key field type

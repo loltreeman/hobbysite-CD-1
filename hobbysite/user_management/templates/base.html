@@ -12,29 +12,32 @@
   <body class="bg-light text-dark">
     <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom mb-4">
       <div class="container">
-        <a class="navbar-brand" href="#">Hobby Site</a>
-        <div class="collapse navbar-collapse">
+        <a class="navbar-brand" href="{% url 'user_management:homepage' %}">Hobby Site</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navMenu">
           <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="/">Home</a>
-            </li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'user_management:homepage' %}">Home</a></li>
             {% if user.is_authenticated %}
             <li class="nav-item">
-              <a class="nav-link" href="/profile/">Profile</a>
+              <a class="nav-link" href="{% url 'user_management:profile_dashboard' %}">Profile</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/logout/">Logout</a>
+              <a class="nav-link" href="{% url 'logout' %}">Logout</a>
             </li>
             {% else %}
             <li class="nav-item">
-              <a class="nav-link" href="/login/">Login</a>
+              <a class="nav-link" href="{% url 'login' %}">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'user_management:signup' %}">Sign Up</a>
             </li>
             {% endif %}
           </ul>
         </div>
       </div>
     </nav>
-
     <main class="container">
       {% block content %}{% endblock %}
     </main>
