@@ -7,9 +7,6 @@ from django.contrib.auth.forms import UserCreationForm
 
 @login_required
 def homepage(request):
-    """
-    Landing page listing all your apps. Redirect target after login.
-    """
     return render(request, 'homepage.html')
 
 @login_required
