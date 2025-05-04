@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Hobby Site{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="{% url 'home' %}">Home</a>
+      <a href="{% url 'blog:article_list' %}">Blog</a>
+      {% if user.is_authenticated %}
+        <a href="{% url 'user_management:profile_dashboard' %}">Profile</a>
+        <a href="{% url 'logout' %}">Logout</a>
+      {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'user_management:signup' %}">Register</a>
+      {% endif %}
+    </nav>
+  </header>
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+  <footer>
+    <p>&copy; 2025 Hobby Site</p>
+  </footer>
+</body>
+</html>
