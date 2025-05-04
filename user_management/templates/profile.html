@@ -1,9 +1,0 @@
-{% extends 'registration/base.html' %}
-
-{% block title %}Profile{% endblock %}
-{% block content %}
-<h2>Welcome, {{ user.profile.display_name }}</h2>
-<p>Username: {{ user.username }}</p>
-<p>Email: {{ user.email }}</p>
-<a href="{{ update_link }}">Edit Profile</a>
-{% endblock %}
