@@ -1,30 +1,31 @@
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.urls import reverse_lazy  # Use reverse_lazy for redirect URL
-from .models import Article, ArticleCategory, Comment, ArticleImage, Profile  # Ensure Profile is imported
+from django.urls import reverse_lazy
+from .models import Article, Comment
+from user_management.models import Profile  # import Profile from user_management
 from .forms import CommentForm
 
 class ArticleListView(LoginRequiredMixin, ListView):
     model = Article
     template_name = 'article_list.html'
-    context_object_name = 'all_articles'
+    context_object_name = 'all_articles'  # we’ll still pass this if needed
+
+    def get_queryset(self):
+        # return all articles except those by this user
+        return Article.objects.exclude(author=self.request.user.profile).select_related('category')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # User's articles
+        # The ones you created:
         context['user_articles'] = Article.objects.filter(author=self.request.user.profile)
-
-        # Group articles by category
+        # Group the “others” (which come from get_queryset())
         grouped = {}
-        for article in Article.objects.select_related('category'):
-            grouped.setdefault(article.category, []).append(article)
-        
-        # Exclude articles created by the logged-in user from the "All Articles" group
+        for a in context['all_articles']:
+            grouped.setdefault(a.category, []).append(a)
         context['grouped_articles'] = grouped.items()
-
         return context
+
 
 class ArticleDetailView(DetailView):
     model = Article
@@ -35,48 +36,32 @@ class ArticleDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         article = self.object
 
-        # Get related articles by the same author
-        context['related_articles'] = Article.objects.filter(author=article.author).exclude(pk=article.pk)
-
-        # Image gallery (if you have images related to the article)
-        context['images'] = ArticleImage.objects.filter(article=article)
-
-        # Comments, sorted by creation date (most recent first)
+        context['related_articles'] = Article.objects.filter(
+            author=article.author
+        ).exclude(pk=article.pk)[:2]
+        context['images'] = article.images.all()
         context['comments'] = Comment.objects.filter(article=article).order_by('-created_on')
-
-        # Comment form for logged-in users
         context['comment_form'] = CommentForm()
-
-        # If the logged-in user is the author of the article, add an edit link
         if self.request.user.profile == article.author:
             context['edit_link'] = True
 
-       # Previous and Next articles based on creation time
         context['previous_article'] = Article.objects.filter(
             created_on__lt=article.created_on
         ).order_by('-created_on').first()
-
         context['next_article'] = Article.objects.filter(
             created_on__gt=article.created_on
         ).order_by('created_on').first()
-
         return context
 
     def post(self, request, *args, **kwargs):
         article = self.get_object()
-        comment_form = CommentForm(request.POST)
-
-        if comment_form.is_valid():
-            # Get the Profile instance associated with the logged-in User
-            user_profile = Profile.objects.get(user=request.user)
-
-            # Save the comment
-            comment = comment_form.save(commit=False)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = Profile.objects.get(user=request.user)
             comment.article = article
-            comment.author = user_profile  # Use Profile instance here
             comment.save()
-
-        return redirect('blog:article_detail', pk=article.pk)  # Redirect to the same article page after posting
+        return redirect('blog:article_detail', pk=article.pk)
 
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
@@ -84,12 +69,11 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     template_name = 'article_add.html'
 
     def form_valid(self, form):
-        # Save the logged-in user's profile as the author
         form.instance.author = self.request.user.profile
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse_lazy('blog:article_list')  # Corrected to use reverse_lazy for success URL
+        return reverse_lazy('blog:article_list')
 
 class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Article
@@ -97,8 +81,7 @@ class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     template_name = 'article_edit.html'
 
     def test_func(self):
-        article = self.get_object()
-        return self.request.user.profile == article.author
+        return self.request.user.profile == self.get_object().author
 
     def get_success_url(self):
-        return reverse_lazy('blog:article_detail', kwargs={'pk': self.object.pk})  # Corrected to use reverse_lazy for redirect
+        return reverse_lazy('blog:article_detail', kwargs={'pk': self.object.pk})
