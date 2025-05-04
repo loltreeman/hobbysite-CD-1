@@ -10,15 +10,7 @@ def homepage(request):
     """
     Landing page listing all your apps. Redirect target after login.
     """
-    apps = [
-        {'label': 'My Profile',      'url': 'user_management:profile_dashboard'},
-        {'label': 'Blog Articles',   'url': 'blog:article_list'},
-        {'label': 'Forum Threads',   'url': 'forum:threadList'},
-        {'label': 'Store Items',     'url': 'merchstore:merch_list'},
-        {'label': 'Wiki Articles',   'url': 'wiki:articles_list'},
-        {'label': 'Commissions',     'url': 'commissions:commissions_list'},
-    ]
-    return render(request, 'homepage.html', {'apps': apps})
+    return render(request, 'homepage.html')
 
 @login_required
 def profile_dashboard(request):
