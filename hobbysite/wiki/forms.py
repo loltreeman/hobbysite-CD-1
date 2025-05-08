@@ -1,10 +1,26 @@
 from django import forms
-from .models import Comment
+from .models import Article, Comment
 
-class CommentForm(forms.ModelForm):
+
+class UploadArticleImageForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        fields = ["header_image"]
+
+
+class CreateArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        exclude = ["created_on", "updated_on", "author"]
+
+
+class UpdateArticleForm(forms.ModelForm):
+    class Meta:
+        model = Article
+        exclude = ["created_on", "author"]
+
+
+class AddCommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ['entry']
-        widgets = {
-            'entry': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
-        }
+        exclude = ["created_on", "updated_on", "author", "article"]
