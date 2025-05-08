@@ -1,19 +1,15 @@
-{% extends 'base.html' %}
+{% extends 'base_wiki.html' %}
 
-{% block title %} Wiki App - Update {% endblock title %}
+{% block title %}Update Article{% endblock %}
 
 {% block content %}
+<h1>Update Article</h1>
 
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Update Article</button>
+</form>
 
-    <h1> Update Article </h1>
-
-    <form method = "post" enctype = "multipart/form-data">
-        {% csrf_token %}
-        
-        {{ form.as_p }} 
-        
-        <button type = "submit"> Update </button>
-    </form>
-
-
+<a href="{% url 'wiki:article_detail' article.pk %}" class="btn btn-secondary">Back to Article</a>
 {% endblock %}

@@ -1,36 +1,40 @@
 {% extends 'base_wiki.html' %}
 
-{% block title %} Wiki App - List {% endblock %}
+{% block title %}Wiki App - Articles{% endblock %}
 
 {% block content %}
+<h1>Welcome, {{ request.user.profile }}</h1>
 
-    <h1> User: <b> {{ request.user.profile }} </b> </h1> <br>
+{% if user.is_authenticated %}
+    <a href="{% url 'wiki:article_create' %}" class="btn btn-primary">Create New Article</a>
+{% else %}
+    <a href="{% url 'login' %}" class="btn btn-secondary">Login to Create Articles</a>
+{% endif %}
 
-    {% if user.is_authenticated %}
-        <a href = "{% url 'wiki:article-add' %}" class = "btn btn-primary"> Create new article </a>
-    {% else %}
-        <a href = "{% url 'wiki:article-add' %}" class = "btn btn-secondary"> Login to create new article </a>
-    {% endif %}
+<hr>
 
-    <h2> Articles of user {{ request.user.profile }} </h2>
+<h2>Your Articles</h2>
+<ul>
+    {% for article in user_articles %}
+        <li>
+            <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+            <small class="text-muted">Created on: {{ article.created_on|date:"F j, Y" }}</small>
+        </li>
+    {% empty %}
+        <p>You have not created any articles yet.</p>
+    {% endfor %}
+</ul>
+
+<h2>All Articles</h2>
+{% for category, articles in grouped_articles.items %}
+    <h3>{{ category }}</h3>
     <ul>
-        {% for article in user_articles %}
-            <li><a href="{{ article.get_absolute_url }}">{{ article.title }} → </a></li>
-            <i>{{ article.created_on }}</i>
-            <br><br>
-        {% empty %}
-            <p>No articles found.</p>
+        {% for article in articles %}
+            <li>
+                <a href="{{ article.get_absolute_url }}">{{ article.title }}</a>
+                <small class="text-muted">Created on: {{ article.created_on|date:"F j, Y" }}</small>
+            </li>
         {% endfor %}
     </ul>
-
-    <h2>All Articles</h2>
-    <ul>
-        {% for article in other_articles %}
-            <li><a href="{{ article.get_absolute_url }}">{{ article.title }} → </a></li>
-            <i>{{ article.created_on }}</i>
-            <br><br>
-        {% empty %}
-            <p>No articles found.</p>
-        {% endfor %}
-    </ul>
+{% endfor %}
 {% endblock %}

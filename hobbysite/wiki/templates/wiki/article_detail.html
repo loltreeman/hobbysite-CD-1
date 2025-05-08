@@ -1,60 +1,64 @@
 {% extends 'base_wiki.html' %}
 
-{% block title %} Wiki App - Detail {% endblock %}
-
+{% block title %}{{ article.title }}{% endblock %}
 
 {% block content %}
+<h1>{{ article.title }}</h1>
 
+{% if article.header_image %}
+    <img src="{{ article.header_image.url }}" alt="{{ article.title }}" class="img-fluid mb-3">
+{% endif %}
 
-    <h1> User: <b> {{ request.user.profile }} </b> </h1> <br>
+<p><strong>Category:</strong> {{ article.category.name }}</p>
+<p><strong>Author:</strong> {{ article.author }}</p>
+<p><strong>Created on:</strong> {{ article.created_on|date:"F j, Y" }}</p>
+<p><strong>Last updated:</strong> {{ article.updated_on|date:"F j, Y" }}</p>
 
-    <h1> Article Detail </h1>
-    <hr>
-    <h2> {{ article.title }} </h2>
+<hr>
 
-    {% if article.header_image %}
-        <img src = "{{ article.header_image.url}}" alt = "{{ article.title }}">
-    {% endif %}
+<p>{{ article.entry }}</p>
 
-    <h2>Other Articles from {{ article.category }} </h2>
-        {% for article in object.category.articles.all %}
-            {% if article != object %}
-            <p>
-                <a href="{{ article.get_absolute_url }}">
-                {{ article.title }}
-                </a>
-            </p>
-            {% else %}
-            {% endif %}
-        {% endfor %}
-        
+{% if user.is_authenticated and user.profile == article.author %}
+    <a href="{% url 'wiki:article_update' article.pk %}" class="btn btn-primary">Edit Article</a>
+{% endif %}
 
-    <p>
-        <b> Author: </b> {{ article.author.username }} <br>
-        <b> Article Created: </b> {{ article.created_on }} <br>
-        <b> Article Updated: </b> {{ article.updated_on }}
-    </p>
+<hr>
 
-    <hr>
+<h2>Other Articles from {{ article.category.name }}</h2>
+<ul>
+    {% for related_article in related_articles %}
+        <li>
+            <a href="{{ related_article.get_absolute_url }}">{{ related_article.title }}</a>
+        </li>
+    {% empty %}
+        <p>No other articles in this category.</p>
+    {% endfor %}
+</ul>
 
-    <p> {{ article.entry }} </p>
+<hr>
 
-    {% if user.is_authenticated and user.profile == article.author %}
-        <a href="{% url 'wiki:article-update' article.pk %}" class="btn btn-primary"> Edit Article </a>
-    {% endif %}
-
-    <h2>Comments</h2>
-    {% for comment in all_comments %}
-        <p>{{ comment.entry }}</p>
+<h2>Comments</h2>
+<ul>
+    {% for comment in comments %}
+        <li>
+            <strong>{{ comment.author }}</strong> ({{ comment.created_on|date:"F j, Y, g:i a" }}):
+            <p>{{ comment.entry }}</p>
+        </li>
     {% empty %}
         <p>No comments yet.</p>
     {% endfor %}
-    <form method="post" action="">
+</ul>
+
+{% if user.is_authenticated %}
+    <h3>Add a Comment</h3>
+    <form method="post">
         {% csrf_token %}
-        {{ comment_form.as_p }}
-        <button type="submit">Submit Comment</button>
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Submit Comment</button>
     </form>
-      <a href="{% url 'wiki:article-list' %}">Back to Article List</a>
+{% else %}
+    <p><a href="{% url 'login' %}">Login</a> to add a comment.</p>
+{% endif %}
 
-
+<a href="{% url 'wiki:article_list' %}" class="btn btn-secondary">Back to Articles</a>
 {% endblock %}

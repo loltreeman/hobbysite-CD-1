@@ -1,23 +1,20 @@
-from django.db.models.query import QuerySet
-from django.http import HttpResponse
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.views.generic.edit import FormMixin
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Article, ArticleCategory
-from .forms import CommentForm
+from .forms import ArticleCreateForm, ArticleUpdateForm, CommentForm
+from user_management.models import Profile
 
-# Create your views here.
 
 class ArticleListView(ListView):
     model = Article
-    template_name = 'wiki/article_list.html'
-    context_object_name = 'articles'
+    template_name = "wiki/article_list.html"
+    context_object_name = "articles"
 
     def get_queryset(self):
-        return super().get_queryset()
+        return Article.objects.select_related("category").order_by("category__name", "title")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -25,89 +22,110 @@ class ArticleListView(ListView):
 
         if user.is_authenticated:
             try:
-                user_profile = user.profile
-                context['user_articles'] = Article.objects.filter(author=user_profile).order_by('-created_on')
-                context['other_articles'] = Article.objects.exclude(author=user_profile).order_by('-created_on')
+                profile = user.profile
+                user_articles = Article.objects.filter(author=profile).order_by("category__name", "title")
+                all_articles = Article.objects.exclude(author=profile).order_by("category__name", "title")
             except Profile.DoesNotExist:
-                context['user_articles'] = None
-                context['other_articles'] = Article.objects.all().order_by('-created_on')
+                user_articles = None
+                all_articles = Article.objects.all().order_by("category__name", "title")
         else:
-            context['user_articles'] = None
-            context['other_articles'] = Article.objects.all().order_by('-created_on')
+            user_articles = None
+            all_articles = Article.objects.all().order_by("category__name", "title")
+
+        grouped_articles = {}
+        for article in all_articles:
+            category_name = article.category.name if article.category else "Uncategorized"
+            grouped_articles.setdefault(category_name, []).append(article)
+
+        context["user_articles"] = user_articles
+        context["grouped_articles"] = grouped_articles
+        context["create_article_url"] = reverse_lazy("wiki:article_create")  # Link to create an article
 
         return context
 
+
 class ArticleDetailView(FormMixin, DetailView):
     model = Article
-    template_name = 'article_detail.html'
-    context_object_name = 'article'
+    template_name = "wiki/article_detail.html"
+    context_object_name = "article"
     form_class = CommentForm
 
     def get_success_url(self):
-        return reverse_lazy('article:article-detail', kwargs={'pk': self.object.pk})
+        return reverse("wiki:article_detail", kwargs={"pk": self.object.pk})
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         article = self.get_object()
-        context['other_articles'] = Article.objects.filter(author=article.author).exclude(pk=article.pk)[:2]
-        context['all_comments'] = article.comments.all().order_by('-created_on')
-        context['comment_form'] = CommentForm()
-        context['can_edit'] = self.request.user == article.author.user
+
+        context["related_articles"] = Article.objects.filter(
+            category=article.category
+        ).exclude(pk=article.pk)[:2]
+
+        context["comments"] = article.comments.order_by("-created_on")
+        if self.request.user.is_authenticated:
+            context["form"] = self.get_form()
+        else:
+            context["form"] = None
+
+        user = self.request.user
+        context["is_owner"] = user.is_authenticated and hasattr(user, "profile") and article.author == user.profile
+
+        context["back_to_list_url"] = reverse("wiki:article_list")
+
         return context
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.get_form()
+
         if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    def form_valid(self, form):
-        form.instance.author = self.request.user.profile
-        form.instance.article = self.get_object()
-        form.save()
-        return super().form_valid(form)
-
-
+            if request.user.is_authenticated and hasattr(request.user, "profile"):
+                comment = form.save(commit=False)
+                comment.article = self.object
+                comment.author = request.user.profile
+                comment.save()
+                return redirect(self.get_success_url())
+            else:
+                return redirect("login")
+        return self.form_invalid(form)
 
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
-    template_name = 'article_create.html'
-    fields = ['title', 'category', 'entry', 'header_image']
-    success_url = reverse_lazy('article:article-list')
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['categories'] = ArticleCategory.objects.all()
-        return context
+    form_class = ArticleCreateForm
+    template_name = "wiki/article_create.html"
+    success_url = reverse_lazy("wiki:article_list") 
 
     def form_valid(self, form):
-        form.instance.author = self.request.user.profile
+        try:
+            profile = self.request.user.profile
+        except Profile.DoesNotExist:
+            return redirect("login")  
+        form.instance.author = profile
         return super().form_valid(form)
 
-
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["category"].queryset = ArticleCategory.objects.all()
+        return form
+    
 
 class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     model = Article
-    fields = ['title', 'category', 'entry', 'header_image']
-    template_name = 'article_update.html'
-    success_url = reverse_lazy('article:article-list')
+    form_class = ArticleUpdateForm
+    template_name = "wiki/article_update.html"
 
-    def get_form(self, form_class = None):
-        form = super().get_form(form_class)
-        form.fields['category'].queryset = ArticleCategory.objects.all()
-        return form
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['update'] = True
-        return context
-
-    def get_initial(self):
-        initial = super().get_initial()
-        initial['author'] = self.request.user
-        return initial
+    def get_success_url(self):
+        return reverse("wiki:article_detail", kwargs={"pk": self.object.pk})
 
     def form_valid(self, form):
+        try:
+            profile = self.request.user.profile
+        except Profile.DoesNotExist:
+            return redirect("login")  
+        form.instance.author = profile 
         return super().form_valid(form)
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields["category"].queryset = ArticleCategory.objects.all()  
+        return form
