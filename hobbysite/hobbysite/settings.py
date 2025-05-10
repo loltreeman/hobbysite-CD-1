@@ -14,7 +14,6 @@ import os
 import environ
 from pathlib import Path
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -36,8 +35,8 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
-MEDIA_URL = '/media/'  # The URL that will serve media files
-MEDIA_ROOT = BASE_DIR / 'media'  # The file system path where media files are stored
+MEDIA_URL = '/media/'  
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Application definition
 
@@ -147,6 +146,3 @@ LOGOUT_REDIRECT_URL = '/accounts/login'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-print("EMAIL_BACKEND:", EMAIL_BACKEND)
-
-
