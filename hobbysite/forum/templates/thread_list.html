@@ -3,33 +3,79 @@
 {% block title %}Forum Threads{% endblock %}
 
 {% block content %}
-{% regroup threads by category as categoryList %}
-{% for categoryGroup in categoryList %}
-    <div class="categorySection">
-        <h2>{{ categoryGroup.grouper.name }}</h2>
-            <p><i>{{ categoryGroup.grouper.description }}</i></p>
-        
-        <table border="1" style="width: 100%; border-collapse: collapse; border: 3px solid black;">
-            <thead>
-                <tr>
-                    <th style="width: 40%; padding: 5px; text-align: center;">Post</th>
-                    <th style="width: 30%; padding: 5px; text-align: center;">Date and Time Created</th>
-                    <th style="width: 30%; padding: 5px; text-align: center;">Last Updated</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for thread in categoryGroup.list %}
-                <tr>
-                    <td style="padding: 10px;">
-                        <a href="{% url 'forum:threadDetail' thread.id %}">{{ thread.title }}</a>
-                    </td>
-                    <td style="padding: 10px; text-align: center;">{{ thread.created_on }}</td>
-                    <td style="padding: 10px; text-align: center;">{{ thread.updated_on }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <br>
-{% endfor %}
+{% if user.is_authenticated %}
+    <h2>Your Threads</h2>
+    {% if grouped_user_threads %}
+        {% for category, threads in grouped_user_threads.items %}
+            <div class="category_section">
+                <h3>{{ category.name }}</h3>
+                <p><i>{{ category.description }}</i></p>
+
+                {% if threads %}
+                    <table border="1" style="width: 80%; border-collapse: collapse; border: 3px solid black;">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%; text-align: center;">Post</th>
+                                <th style="width: 30%; text-align: center;">Created</th>
+                                <th style="width: 30%; text-align: center;">Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for thread in threads %}
+                            <tr>
+                                <td><a href="{% url 'forum:thread_detail' thread.pk %}">{{ thread.title }}</a></td>
+                                <td style="text-align: center;">{{ thread.created_on|date:"M d, Y H:i" }}</td>
+                                <td style="text-align: center;">{{ thread.updated_on|date:"M d, Y H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No threads available in this category.</p>
+                {% endif %}
+            </div>
+            <br>
+        {% endfor %}
+    {% else %}
+        <p>No threads available.</p>
+    {% endif %}
+
+    <h2>Other Threads</h2>
+    {% if grouped_all_threads %}
+        {% for category, threads in grouped_all_threads.items %}
+            <div class="category_section">
+                <h3>{{ category.name }}</h3>
+                <p><i>{{ category.description }}</i></p>
+
+                {% if threads %}
+                    <table border="1" style="width: 80%; border-collapse: collapse; border: 3px solid black;">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%; text-align: center;">Post</th>
+                                <th style="width: 30%; text-align: center;">Created</th>
+                                <th style="width: 30%; text-align: center;">Last Updated</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for thread in threads %}
+                            <tr>
+                                <td><a href="{% url 'forum:thread_detail' thread.pk %}">{{ thread.title }}</a></td>
+                                <td style="text-align: center;">{{ thread.created_on|date:"M d, Y H:i" }}</td>
+                                <td style="text-align: center;">{{ thread.updated_on|date:"M d, Y H:i" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                {% else %}
+                    <p>No threads available in this category.</p>
+                {% endif %}
+            </div>
+            <br>
+        {% endfor %}
+    {% else %}
+        <p>No threads available.</p>
+    {% endif %}
+
+    <p><a href="{% url 'forum:thread_create' %}">Create a New Thread</a></p>
+{% endif %}
 {% endblock %}
