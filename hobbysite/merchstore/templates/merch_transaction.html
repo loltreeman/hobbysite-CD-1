@@ -4,8 +4,8 @@
 
 {% block content %}
 
-<h1>Transactions</h1> 
-<u1>
+<h1 class="text-center mb-4">Transactions</h1> 
+<u1 class="text-center mb-4">
     {% for transaction in transactions %}
         <li>{{transaction.product.name}} - {{transaction.amount}} pcs by {{transaction.buyer}}</li>
         

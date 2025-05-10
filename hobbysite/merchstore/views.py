@@ -70,6 +70,7 @@ def merchUpdate(request, pk):
         updateform = ProductForm(request.POST, instance=instance)
         if updateform.is_valid():
             updateform.save()
+            return redirect('merchstore:merch_list')
     else:
              updateform = ProductForm(instance=instance)
     return render(request, 'merch_update.html', {'update_form':updateform})

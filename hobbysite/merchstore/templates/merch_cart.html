@@ -4,10 +4,10 @@
 
 {% block content %}
 
-<h1>Cart</h1> 
-<u1>
+<h1 class="text-center mb-4">Cart</h1> 
+<u1 class="text-center mb-4">
     {% for transaction in transactions %}
-        <li>{{transaction.product.name}} - {{transaction.amount}} pcs</li>
+        <li class="text-center mb-4">{{transaction.product.name}} - {{transaction.amount}} pcs</li>
 
 </u1>
 {% endfor %}
