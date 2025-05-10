@@ -1,15 +1,18 @@
 from django.contrib import admin
-from .models import PostCategory, Post
+from .models import ThreadCategory, Thread, Comment
 
-class PostCategoryAdmin(admin.ModelAdmin):
-    model = PostCategory
+class ThreadCategoryAdmin(admin.ModelAdmin):
+    model = ThreadCategory
     list_display = ('name', 'description')
-    ordering = ['name']
 
-class PostAdmin(admin.ModelAdmin):
-    model = Post
-    list_display = ('title', 'category__name', 'created_on', 'updated_on')
-    ordering = ['-created_on']
+class ThreadAdmin(admin.ModelAdmin):
+    model = Thread
+    list_display = ('title', 'category', 'author', 'created_on', 'updated_on')
 
-admin.site.register(PostCategory, PostCategoryAdmin)
-admin.site.register(Post, PostAdmin)
+class CommentAdmin(admin.ModelAdmin):
+    model = Comment
+    list_display = ('thread', 'author', 'created_on', 'updated_on')
+
+admin.site.register(ThreadCategory, ThreadCategoryAdmin)
+admin.site.register(Thread, ThreadAdmin)
+admin.site.register(Comment, CommentAdmin)
