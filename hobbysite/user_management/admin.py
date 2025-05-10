@@ -12,6 +12,5 @@ class ProfileInline(admin.StackedInline):
 class UserAdmin(BaseUserAdmin):
     inlines = [ProfileInline]
 
-# Unregister the default User admin and register the extended version
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
