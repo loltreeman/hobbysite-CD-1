@@ -1,0 +1,35 @@
+{% extends 'merchstore/base_merchStore.html' %}
+
+{% block title %}Merch Store{% endblock %}
+
+{% block content %}
+
+
+    <h1>{{merch.name}}</h1>
+    <u1>
+            
+            <li>Product Type:  {{ merch.product_type.name }}</li>
+            <li>Name: {{ merch.name }} </li>
+            <li>Owner: {{merch.owner}}</li>
+            <li>Description: {{ merch.description }} </li>
+            <li>Price: ${{ merch.price }}</li>
+            <li>Stock: {{merch.stock}}</li>
+            <li>Status: {{merch.status}}</li>
+            {% if can_purchase == False %}
+             <a href="{% url 'merchstore:merch_update' merch.pk %}"> Update</a>
+            {% endif %}
+            <br> 
+
+
+            {% if can_purchase and merch.stock > 0 %}
+            <form method="post">
+                {% csrf_token %}
+                {{ transact_form.as_p }}
+                <button type="submit">Buy</button>
+            </form>
+            {% else %}
+                <button disabled>Not Available for Purchase</button>
+            {% endif %}
+            
+    </u1>
+{% endblock %}

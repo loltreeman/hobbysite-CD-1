@@ -1,0 +1,14 @@
+{% extends 'merchstore/base_merchStore.html' %}
+
+{% block title %}Merch Store{% endblock %}
+
+{% block content %}
+
+
+<form method="post">
+    {% csrf_token %}
+    {{ update_form.as_p }}
+    <button type="submit">Save Changes</button>
+</form>
+
+{% endblock %}
