@@ -9,7 +9,6 @@ class ArticleForm(forms.ModelForm):
 class ArticleUpdateForm(forms.ModelForm):
     class Meta:
         model = Article
-        # Exclude 'created_on' and 'author' as they should not be editable
         exclude = ['created_on', 'author'] 
 
 class CommentForm(forms.ModelForm):
