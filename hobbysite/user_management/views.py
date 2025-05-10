@@ -8,11 +8,11 @@ from django.contrib.auth.forms import UserCreationForm
 
 @login_required
 def homepage(request):
-    return render(request, 'homepage.html')
+    return render(request, 'registration/homepage.html')
 
 @login_required
 def profile_dashboard(request):
-    return render(request, 'profile.html', {
+    return render(request, 'registration/profile.html', {
         'user': request.user,
         'update_link': reverse_lazy('user_management:profile_update')
     })
@@ -27,7 +27,7 @@ def profile_update(request):
             return redirect('user_management:profile_dashboard')
     else:
         form = ProfileForm(instance=profile)
-    return render(request, 'profile_update.html', {'form': form})
+    return render(request, 'registration/profile_update.html', {'form': form})
 
 def register_view(request):
     if request.method == 'POST':
@@ -39,4 +39,4 @@ def register_view(request):
     else:
         form = CustomUserCreationForm()
 
-    return render(request, 'register.html', {'form': form})
+    return render(request, 'registration/register.html', {'form': form})

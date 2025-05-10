@@ -15,7 +15,7 @@ def merchList(request):
          user_products = None
          other_products = Product.objects.all()
     ctx = {"user_products": user_products, "other_products":other_products}
-    return render(request, "merch_list.html", ctx)
+    return render(request, "merchstore/merch_list.html", ctx)
 
 @login_required
 def merchDetail(request, pk):
@@ -44,7 +44,7 @@ def merchDetail(request, pk):
     else:
             transactForm = TransactionForm(request.POST)
     ctx = {"merch": merch , "transact_form" : transactForm, "can_purchase":can_purchase}
-    return render(request, "merch_detail.html", ctx)
+    return render(request, "merchstore/merch_detail.html", ctx)
 
 @login_required
 def merchCreate(request):
@@ -61,7 +61,7 @@ def merchCreate(request):
         productform = ProductForm(request.POST, request.FILES)
         productTypeform = ProductTypeForm(request.POST)
 
-    return render(request,'merch_create.html',{"product_form": productform, "productType_form":productTypeform})
+    return render(request,'merchstore/merch_create.html',{"product_form": productform, "productType_form":productTypeform})
 
 @login_required
 def merchUpdate(request, pk):
@@ -73,16 +73,16 @@ def merchUpdate(request, pk):
             return redirect('merchstore:merch_list')
     else:
              updateform = ProductForm(instance=instance)
-    return render(request, 'merch_update.html', {'update_form':updateform})
+    return render(request, 'merchstore/merch_update.html', {'update_form':updateform})
 
 @login_required
 def merchCart(request):
     transaction = Transaction.objects.filter(buyer=request.user.profile, status='on_cart').select_related('product')
     ctx = {"transactions": transaction}
-    return render(request, "merch_cart.html", ctx)
+    return render(request, "merchstore/merch_cart.html", ctx)
 
 @login_required
 def merchTransactions(request):
     transaction = Transaction.objects.filter(product__owner=request.user.profile).select_related('buyer', 'product').order_by('buyer')
     ctx = {'transactions': transaction}
-    return render(request, 'merch_transaction.html', ctx)
+    return render(request, 'merchstore/merch_transaction.html', ctx)
