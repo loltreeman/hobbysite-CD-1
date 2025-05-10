@@ -12,14 +12,11 @@ class ArticleListView(LoginRequiredMixin, ListView):
     context_object_name = 'all_articles' 
 
     def get_queryset(self):
-        # return all articles except those by this user
         return Article.objects.exclude(author=self.request.user.profile).select_related('category')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # The ones you created:
         context['user_articles'] = Article.objects.filter(author=self.request.user.profile)
-        # Group the “others” (which come from get_queryset())
         grouped = {}
         for a in context['all_articles']:
             grouped.setdefault(a.category, []).append(a)
@@ -63,8 +60,6 @@ class ArticleDetailView(DetailView):
             comment.save()
         return redirect('blog:article_detail', pk=article.pk)
 
-from .models import ArticleCategory  # make sure this import is at the top
-
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     fields = ['title', 'category', 'entry', 'header_image']
@@ -73,7 +68,6 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
 
-        # Check if a new category was provided
         new_category_name = self.request.POST.get('new_category')
         if new_category_name:
             category, created = ArticleCategory.objects.get_or_create(name=new_category_name.strip())
