@@ -56,6 +56,14 @@ class ThreadDetailView(LoginRequiredMixin, DetailView):
         if thread.author == profile:
             context['edit_link'] = True
 
+        context['previous_thread'] = Thread.objects.filter(
+            created_on__lt=thread.created_on
+        ).order_by('-created_on').first()
+        
+        context['next_thread'] = Thread.objects.filter(
+            created_on__gt=thread.created_on
+        ).order_by('created_on').first()
+
         return context
 
     def post(self, request, *args, **kwargs):
