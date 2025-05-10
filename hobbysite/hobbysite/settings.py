@@ -36,6 +36,8 @@ DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+MEDIA_URL = '/media/'  # The URL that will serve media files
+MEDIA_ROOT = BASE_DIR / 'media'  # The file system path where media files are stored
 
 # Application definition
 

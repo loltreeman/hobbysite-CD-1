@@ -1,0 +1,57 @@
+{% extends "base_blog.html" %}
+{% load static %}
+
+{% block title %}
+  Edit Article
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="text-center mb-4">
+    <img src="{% static 'blog/img/article-update.png' %}" class="img-fluid" style="max-height: 200px;" alt="Edit Article Banner">
+  </div>
+
+  <form method="POST" enctype="multipart/form-data" class="border p-4 rounded bg-light">
+    {% csrf_token %}
+    <div class="row">
+      <!-- Left column: text fields -->
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          {{ form.title }}
+        </div>
+
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          {{ form.category }}
+        </div>
+
+        <div class="mb-3">
+          <label for="entry" class="form-label">Entry</label>
+          {{ form.entry }}
+        </div>
+      </div>
+
+      <!-- Right column: image and actions -->
+      <div class="col-md-6">
+        {% if object.header_image %}
+        <div class="mb-3 text-center">
+          <p class="fw-bold">Current Header Image:</p>
+          <img src="{{ object.header_image.url }}" class="img-fluid rounded" style="max-height: 200px;" alt="Current Image">
+        </div>
+        {% endif %}
+
+        <div class="mb-3">
+          <label for="header_image" class="form-label">New Header Image</label>
+          {{ form.header_image }}
+        </div>
+
+        <div class="d-grid gap-2">
+          <button type="submit" class="btn btn-success">Save Changes</button>
+          <a href="{% url 'blog:article_detail' object.pk %}" class="btn btn-outline-secondary">Back to Article</a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

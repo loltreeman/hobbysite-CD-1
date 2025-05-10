@@ -1,0 +1,56 @@
+{% extends "base_blog.html" %}
+{% load static %}
+
+{% block title %}
+  Add Article
+{% endblock title %}
+
+{% block content %}
+
+  <form method="POST" enctype="multipart/form-data" class="border p-4 rounded bg-light">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="title" class="form-label">Title</label>
+          <input type="text" name="title" class="form-control" value="{{ form.title.value }}">
+        </div>
+
+        <div class="mb-3">
+          <label for="category" class="form-label">Category</label>
+          <select name="category" class="form-select">
+            {% for category in form.category.field.queryset %}
+              <option value="{{ category.id }}" {% if category == form.category.value %} selected {% endif %}>
+                {{ category }}
+              </option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="new_category" class="form-label">Or Add a New Category</label>
+          <input type="text" name="new_category" class="form-control" placeholder="Type new category name here">
+        </div>        
+
+        <div class="mb-3">
+          <label for="entry" class="form-label">Entry</label>
+          <textarea name="entry" class="form-control">{{ form.entry.value }}</textarea>
+        </div>
+      </div>
+
+      <div class="col-md-6">
+        <div class="mb-3">
+          <label for="image" class="form-label">Header Image</label>
+          <input type="file" name="header_image" class="form-control">
+        </div>
+
+        <div class="d-grid gap-2 d-md-block">
+          <button type="submit" class="btn btn-success">Submit</button>
+          <button type="reset" class="btn btn-outline-warning">Reset</button>
+          <a href="{% url 'blog:article_list' %}" class="btn btn-secondary">Done</a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}

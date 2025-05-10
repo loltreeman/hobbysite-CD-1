@@ -48,7 +48,22 @@
                 <li><a class="nav-link px-2 link-secondary" href="/merchstore/items/">Merch Store</a></li>
             </ul>
             <div class="col-auto text-end">
-            </div>
+                {% if request.user.is_authenticated %}
+                <span class="me-2">
+                    Welcome, 
+                    <a href="{% url 'user_management:profile_dashboard' %}" class="fw-bold text-decoration-none">
+                      {{ request.user.username }}
+                    </a>!
+                  </span>
+                  <form action="{% url 'logout' %}" method="POST" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm">Log out</button>
+                  </form>
+                {% else %}
+                  <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm me-2">Log in</a>
+                  <a href="{{ register_url }}" class="btn btn-primary btn-sm">Sign up</a>
+                {% endif %}
+              </div>
         </header>
     </nav>    
     <article>
