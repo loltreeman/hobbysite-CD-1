@@ -30,5 +30,10 @@ urlpatterns = [
     path("wiki/", include("wiki.urls", namespace="wiki")),
     path("accounts/", include("django.contrib.auth.urls")),
     path('admin/', admin.site.urls),
+    path('forum/', include('forum.urls')),
+    path('blog/', include('blog.urls')),
+    path('merchstore/', include("merchstore.urls")),
+    path('commissions/', include('commissions.urls')),
+    path('wiki/', include('wiki.urls'))
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

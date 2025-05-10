@@ -3,12 +3,26 @@
 {% block title %}Merch Store{% endblock %}
 
 {% block content %}
-    <h1>Merch Store</h1>
-    <ul>
-        {% for merch in merch_types %}
-            <li>
-                <a href="{% url 'merchstore:merch_detail' merch.pk %}">{{ merch.name }}</a>
-            </li>
+    <h1 class="text-center mb-4">Merch Store</h1>
+    <ul class="text-center mb-4">
+        <div class="box text-center mb-4">
+        <h2>Your Products</h2>
+        {% for user_products in user_products %}
+            
+                <a href="{% url 'merchstore:merch_detail' user_products.pk %}" >{{ user_products.name }} </a> - {{user_products.status}}
+            <br>
         {% endfor %}
+        </div>
+        <div class="box text-center mb-4">
+        <h2>Other Products</h2>
+        {% for other_products in other_products%}
+                <a href="{% url 'merchstore:merch_detail' other_products.pk %}" >{{ other_products.name }} </a> -  {{other_products.status}}
+            <br>
+        {% endfor %}
+        </div>
+        <br>
+        <h3>
+        <a href="{% url 'merchstore:merch_create'%}">Create Product</a> 
+    </h3>
     </ul>
 {% endblock %}

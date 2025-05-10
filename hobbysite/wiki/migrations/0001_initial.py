@@ -13,33 +13,31 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Commission',
+            name='ArticleCategory',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=255)),
+                ('name', models.CharField(max_length=255)),
                 ('description', models.TextField()),
-                ('people_required', models.PositiveIntegerField()),
-                ('created_on', models.DateTimeField(auto_now_add=True)),
-                ('updated_on', models.DateTimeField(auto_now=True)),
             ],
             options={
-                'verbose_name': 'Commission',
-                'verbose_name_plural': 'Commissions',
-                'ordering': ['created_on'],
+                'verbose_name': 'Article Category',
+                'verbose_name_plural': 'Article Categories',
+                'ordering': ['name'],
             },
         ),
         migrations.CreateModel(
-            name='Comment',
+            name='Article',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('title', models.CharField(max_length=255)),
                 ('entry', models.TextField()),
                 ('created_on', models.DateTimeField(auto_now_add=True)),
                 ('updated_on', models.DateTimeField(auto_now=True)),
-                ('commission', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='comments', to='commissions.commission')),
+                ('category', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL, related_name='articles', to='wiki.articlecategory')),
             ],
             options={
-                'verbose_name': 'Comment',
-                'verbose_name_plural': 'Comments',
+                'verbose_name': 'Article',
+                'verbose_name_plural': 'Articles',
                 'ordering': ['-created_on'],
             },
         ),
