@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile{% endblock %}
+{% block content %}
+<div class="w-50 mx-auto">
+  <h2>Welcome, {{ user.profile.display_name }}</h2>
+  <p><strong>Username:</strong> {{ user.username }}</p>
+  <p><strong>Email:</strong> {{ user.profile.email }}</p>
+  <a href="{% url 'user_management:profile_update' %}" class="btn btn-outline-primary">Edit Profile</a>
+</div>
+{% endblock %}
