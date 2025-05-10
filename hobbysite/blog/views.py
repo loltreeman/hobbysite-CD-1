@@ -2,14 +2,14 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.shortcuts import redirect
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse_lazy
-from .models import Article, Comment
-from user_management.models import Profile  # import Profile from user_management
+from .models import Article, Comment, ArticleCategory
+from user_management.models import Profile 
 from .forms import CommentForm
 
 class ArticleListView(LoginRequiredMixin, ListView):
     model = Article
     template_name = 'article_list.html'
-    context_object_name = 'all_articles'  # we’ll still pass this if needed
+    context_object_name = 'all_articles' 
 
     def get_queryset(self):
         # return all articles except those by this user
@@ -63,6 +63,8 @@ class ArticleDetailView(DetailView):
             comment.save()
         return redirect('blog:article_detail', pk=article.pk)
 
+from .models import ArticleCategory  # make sure this import is at the top
+
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
     fields = ['title', 'category', 'entry', 'header_image']
@@ -70,10 +72,18 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user.profile
+
+        # Check if a new category was provided
+        new_category_name = self.request.POST.get('new_category')
+        if new_category_name:
+            category, created = ArticleCategory.objects.get_or_create(name=new_category_name.strip())
+            form.instance.category = category  # Override selected dropdown category
+
         return super().form_valid(form)
 
     def get_success_url(self):
         return reverse_lazy('blog:article_list')
+
 
 class ArticleUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Article

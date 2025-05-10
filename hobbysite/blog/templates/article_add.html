@@ -1,4 +1,3 @@
-<!-- article_add.html -->
 {% extends "base_blog.html" %}
 {% load static %}
 
@@ -7,10 +6,6 @@
 {% endblock title %}
 
 {% block content %}
-<div class="container mt-5">
-  <div class="text-center mb-4">
-    <img src="{% static 'blog/img/article-create.png' %}" class="img-fluid" style="max-height: 200px;" alt="Create Article Banner">
-  </div>
 
   <form method="POST" enctype="multipart/form-data" class="border p-4 rounded bg-light">
     {% csrf_token %}
@@ -31,6 +26,11 @@
             {% endfor %}
           </select>
         </div>
+
+        <div class="mb-3">
+          <label for="new_category" class="form-label">Or Add a New Category</label>
+          <input type="text" name="new_category" class="form-control" placeholder="Type new category name here">
+        </div>        
 
         <div class="mb-3">
           <label for="entry" class="form-label">Entry</label>
