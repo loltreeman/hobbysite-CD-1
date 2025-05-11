@@ -1,22 +1,21 @@
 from django.contrib import admin
-from .models import Commission, Comment
+from .models import Commission, Job
 
 
 class CommissionAdmin(admin.ModelAdmin):
     model = Commission
-    list_display = ("title", "people_required", "created_on", "updated_on")
+    list_display = ("title", "status", "created_on", "updated_on", "author")
     search_fields = ("title", "description")
-    list_filter = ("created_on", "updated_on")
-    ordering = ("created_on",)
+    list_filter = ("status",)
 
-
-class CommentAdmin(admin.ModelAdmin):
-    model = Comment
-    list_display = ("commission", "entry", "created_on", "updated_on")
-    search_fields = ("entry", "commission__title")
-    list_filter = ("created_on", "updated_on")
-    ordering = ("-created_on",)
-
+class JobAdmin(admin.ModelAdmin):
+    model = Job
+    list_display = ("status", "commission", "manpower_required", "role")
+    search_fields = ("title", "description")
+    list_filter = ("status",)
 
 admin.site.register(Commission, CommissionAdmin)
-admin.site.register(Comment, CommentAdmin)
+admin.site.register(Job, JobAdmin)
+
+
+
