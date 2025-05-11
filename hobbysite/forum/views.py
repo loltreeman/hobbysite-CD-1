@@ -8,7 +8,7 @@ from user_management.models import Profile
 
 class ThreadListView(LoginRequiredMixin, ListView):
     model = Thread
-    template_name = 'thread_list.html'
+    template_name = 'forum/thread_list.html'
     context_object_name = 'all_threads'
 
     def get_queryset(self):
@@ -30,15 +30,16 @@ class ThreadListView(LoginRequiredMixin, ListView):
             grouped_all_threads.setdefault(thread.category, []).append(thread)
 
         context['user_threads'] = user_threads
-        context['grouped_user_threads'] = grouped_user_threads.items()
-        context['grouped_all_threads'] = grouped_all_threads.items()
+        context['grouped_user_threads'] = grouped_user_threads  
+        context['grouped_all_threads'] = grouped_all_threads  
         context['all_categories'] = ThreadCategory.objects.all()
 
         return context
 
+
 class ThreadDetailView(LoginRequiredMixin, DetailView):
     model = Thread
-    template_name = 'thread_detail.html'
+    template_name = 'forum/thread_detail.html'
     context_object_name = 'thread'
 
     def get_context_data(self, **kwargs):
@@ -79,7 +80,7 @@ class ThreadDetailView(LoginRequiredMixin, DetailView):
 class ThreadCreateView(LoginRequiredMixin, CreateView):
     model = Thread
     form_class = ThreadCreateForm
-    template_name = 'thread_create.html'
+    template_name = 'forum/thread_create.html'
 
     def form_valid(self, form):
         form.instance.author = Profile.objects.get(user=self.request.user)
@@ -91,7 +92,7 @@ class ThreadCreateView(LoginRequiredMixin, CreateView):
 class ThreadUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Thread
     form_class = ThreadUpdateForm
-    template_name = 'thread_update.html'
+    template_name = 'forum/thread_update.html'
 
     def test_func(self):
         profile = Profile.objects.get(user=self.request.user)
