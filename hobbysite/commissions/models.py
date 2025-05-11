@@ -3,11 +3,10 @@ from django.contrib.auth.models import User
 
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    name = models.CharField(max_length=50, blank=True)
-    
+    display_name = models.CharField(max_length=50, blank=True)
+
     def __str__(self):
-        return self.name
-    
+        return self.display_name
 class Commission(models.Model):
     status_options = [
         ('0', 'Open'),
