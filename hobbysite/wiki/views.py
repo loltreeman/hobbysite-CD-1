@@ -4,7 +4,7 @@ from django.views.generic.edit import FormMixin
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Article, ArticleCategory
-from .forms import ArticleCreateForm, ArticleUpdateForm, CommentForm
+from .forms import CreateArticleForm, UpdateArticleForm, CommentForm
 from user_management.models import Profile
 
 
@@ -39,11 +39,10 @@ class ArticleListView(ListView):
 
         context["user_articles"] = user_articles
         context["grouped_articles"] = grouped_articles
-        context["create_article_url"] = reverse_lazy("wiki:article_create")  # Link to create an article
+        context["create_article_url"] = reverse_lazy("wiki:article_create") 
 
         return context
-
-
+    
 class ArticleDetailView(FormMixin, DetailView):
     model = Article
     template_name = "wiki/article_detail.html"
@@ -61,7 +60,7 @@ class ArticleDetailView(FormMixin, DetailView):
             category=article.category
         ).exclude(pk=article.pk)[:2]
 
-        context["comments"] = article.comments.order_by("-created_on")
+        context["comments"] = article.wiki_comments.order_by("-created_on")  # Correct related name for comments
         if self.request.user.is_authenticated:
             context["form"] = self.get_form()
         else:
@@ -91,9 +90,9 @@ class ArticleDetailView(FormMixin, DetailView):
 
 class ArticleCreateView(LoginRequiredMixin, CreateView):
     model = Article
-    form_class = ArticleCreateForm
+    form_class = CreateArticleForm
     template_name = "wiki/article_create.html"
-    success_url = reverse_lazy("wiki:article_list") 
+    success_url = reverse_lazy("wiki:article_list")
 
     def form_valid(self, form):
         try:
@@ -111,7 +110,7 @@ class ArticleCreateView(LoginRequiredMixin, CreateView):
 
 class ArticleUpdateView(LoginRequiredMixin, UpdateView):
     model = Article
-    form_class = ArticleUpdateForm
+    form_class = UpdateArticleForm
     template_name = "wiki/article_update.html"
 
     def get_success_url(self):
@@ -122,7 +121,7 @@ class ArticleUpdateView(LoginRequiredMixin, UpdateView):
             profile = self.request.user.profile
         except Profile.DoesNotExist:
             return redirect("login")  
-        form.instance.author = profile 
+        form.instance.author = profile  # Ensuring the author field is not modified
         return super().form_valid(form)
 
     def get_form(self, form_class=None):
