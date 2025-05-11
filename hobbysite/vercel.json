@@ -1,13 +1,18 @@
 {
-    "builds": [{
-        "src": "hobbysite/wsgi.py",
-        "use": "@vercel/python",
-        "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
-    }],
-    "routes": [
-        {
-            "src": "/(.*)",
-            "dest": "hobbysite/wsgi.py"
-        }
-    ]
+  "builds": [{
+    "src": "hobbysite/wsgi.py",
+    "use": "@vercel/python",
+    "config": { "maxLambdaSize": "15mb", "runtime": "python3.9" }
+  }],
+  "routes": [
+    {
+      "src": "^/$",
+      "status": 301,
+      "headers": { "Location": "/profile/" }
+    },
+    {
+      "src": "/(.*)",
+      "dest": "hobbysite/wsgi.py"
+    }
+  ]
 }
