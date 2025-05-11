@@ -12,7 +12,7 @@
                 {% for commission in created_commissions %}
                     <li>
                         <a href="{% url 'commissions:commissions_detail' commission.id %}">
-                            {{ commission.title}} | {{ commission.created_on|date:"d-m-Y" }} | {{ commission.status }}
+                            {{ commission.title}} | {{ commission.created_on|date:"d-m-Y" }} | {{ commission.get_status_display }}
                         </a>
                     </li>
                 {% endfor %}
@@ -27,7 +27,7 @@
                 {% for commission in applied_commissions %}
                     <li>
                         <a href="{% url 'commissions:commissions_detail' commission.id %}">
-                            {{ commission.title}} | {{ commission.created_on|date:"d-m-Y" }} | {{ commission.status }}
+                            {{ commission.title}} | {{ commission.created_on|date:"d-m-Y" }} | {{ commission.get_status_display }}
                         </a>
                     </li>
                 {% endfor %}
@@ -42,7 +42,7 @@
         {% for commission in commissions %}
             <li>
                 <a href="{% url 'commissions:commissions_detail' commission.id %}">
-                    {{ commission.title}} | {{ commission.created_on|date:"d-m-Y" }} | {{ commission.status }}
+                    {{ commission.title}} | {{ commission.created_on|date:"d-m-Y" }} | {{ commission.get_status_display }}
                 </a>
             </li>
         {% endfor %}

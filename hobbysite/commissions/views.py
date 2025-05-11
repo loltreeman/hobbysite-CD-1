@@ -93,7 +93,7 @@ def update_view(request, id):
             jobs = Job.objects.filter(commission=commission)
             jobs_full = all(JobApplication.objects.filter(job=job, status='1').count() >= job.manpower_required for job in jobs)
 
-            if jobs_full:
+            if jobs_full and jobs.exists():
                 commission.status = 'Full'
             commission.save()
             return redirect('commissions:commissions_detail', id=commission.id)
