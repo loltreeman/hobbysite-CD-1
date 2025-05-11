@@ -1,0 +1,60 @@
+{% extends 'forum/base_forum.html' %}
+
+{% block content %}
+
+<a href="{% url 'forum:thread_list' %}">&larr; Back</a>
+
+<h1>{{ thread.title }}</h1>
+<p>By {{ thread.author }} on {{ thread.created_on|date:"M d, Y H:i" }}</p>
+
+{% if thread.header_image %}
+  <img src="{{ thread.header_image.url }}" alt="{{ thread.title }} image">
+{% else %}
+  <p>No image available</p>
+{% endif %}
+
+<p>{{ thread.entry|linebreaks }}</p>
+
+{% if user.is_authenticated and user == thread.author %}
+  <a href="{% url 'forum:thread_update' thread.pk %}">Edit Thread</a>
+{% endif %}
+
+<h3>More in {{ thread.category.name }}</h3>
+<ul>
+  {% for related_thread in related_threads %}
+    <li><a href="{% url 'forum:thread_detail' related_thread.pk %}">{{ related_thread.title }}</a></li>
+  {% empty %}
+    <li>No other threads for {{ thread.category.name }}</li>
+  {% endfor %}
+</ul>
+
+<h2>Comments</h2>
+<ul>
+  {% for comment in comments %}
+    <li>
+      <strong>{{ comment.author }}</strong> on {{ comment.created_on|date:"M d, Y H:i" }}<br>
+      {{ comment.entry|linebreaks }}
+    </li>
+  {% empty %}
+    <li>No comments yet.</li>
+  {% endfor %}
+</ul>
+
+{% if previous_thread %}
+  <a href="{% url 'forum:thread_detail' previous_thread.pk %}">&larr; Previous</a>
+{% endif %}
+{% if next_thread %}
+  <a href="{% url 'forum:thread_detail' next_thread.pk %}">Next &rarr;</a>
+{% endif %}
+
+<h2>Leave a Comment</h2>
+{% if user.is_authenticated %}
+  <form method="post">{% csrf_token %}
+    {{ comment_form.as_p }}
+    <button type="submit">Post</button>
+  </form>
+{% else %}
+  <a href="{% url 'login' %}">Log in</a> to comment.
+{% endif %}
+
+{% endblock %}

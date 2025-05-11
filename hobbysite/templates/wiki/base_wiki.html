@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Online Wiki App{% endblock %}</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            background: radial-gradient(circle, #1e1e1e, #121212);
+        }
+
+        header {
+            background-color: #1f1f1f;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #333;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            color: #ffffff;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+        }
+
+        main {
+            padding: 20px;
+            max-width: 900px;
+            margin: 30px auto;
+            background-color: #1e1e1e;
+            border: 1px solid #333;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        a {
+            color: #76c7c0;
+            text-decoration: none;
+            border-bottom: 1px solid #76c7c0;
+            transition: color 0.3s ease, border-bottom-color 0.3s ease;
+        }
+
+        a:hover {
+            color: #ffffff;
+            border-bottom-color: #ffffff;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background-color: #444;
+            margin: 20px 0;
+        }
+
+        /* Button Styling */
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            margin: 12px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            box-shadow: 4px 4px 8px #0e0e0e, -4px -4px 8px #2e2e2e;
+            color: #e0e0e0;
+            font-size: 16px;
+            font-weight: bold;
+            text-transform: uppercase;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background: linear-gradient(145deg, #1a1a1a, #2a2a2a);
+            box-shadow: inset 4px 4px 8px #0e0e0e, inset -4px -4px 8px #2e2e2e;
+            color: #76c7c0;
+        }
+
+        /* Footer Styling */
+        footer {
+            text-align: center;
+            padding: 10px;
+            background-color: #1f1f1f;
+            color: #888;
+            font-size: 0.9rem;
+            border-top: 1px solid #333;
+        }
+
+        footer a {
+            color: #76c7c0;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{% block header %}Online Wiki App{% endblock %}</h1>
+    </header>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>
