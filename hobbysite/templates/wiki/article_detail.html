@@ -16,8 +16,8 @@
 
     <hr>
 
-    <div class="border p-4 rounded bg-light shadow-sm">
-        <p>{{ article.entry }}</p>
+    <div class="content-container border p-4 rounded bg-light shadow-sm">
+        <p style="word-wrap: break-word;">{{ article.entry }}</p>
     </div>
 
     {% if user.is_authenticated and user.profile == article.author %}
