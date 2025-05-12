@@ -27,13 +27,13 @@ env = environ.Env(
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', default='django-insecure-bqy%3qw^ex%5w140b-p7%xxi_1j(^y6qgcr2q-1&v$fdvgu(f6')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = False
 
-ALLOWED_HOSTS = ['.vercel.app', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 MEDIA_URL = '/media/'  
 MEDIA_ROOT = BASE_DIR / 'media'
@@ -133,6 +133,7 @@ USE_TZ = True
 
 STATICFILES_DIRS = [BASE_DIR / env('STATIC_DIR', default='static')]
 STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'

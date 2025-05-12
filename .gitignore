@@ -179,3 +179,12 @@ hobbysite/wiki/migrations/0001_initial.py
 hobbysite/user_management/__init__.py
 hobbysite/merchstore/migrations/0003_alter_product_price_alter_product_product_type_and_more.py
 hobbysite/wiki/migrations/0002_alter_article_author_alter_article_header_image_and_more.py
+hobbysite/blog/migrations/0001_initial.py
+hobbysite/blog/migrations/__init__.py
+hobbysite/commissions/migrations/0001_initial.py
+hobbysite/forum/migrations/0001_initial.py
+hobbysite/forum/migrations/__init__.py
+hobbysite/merchstore/migrations/0001_initial.py
+hobbysite/merchstore/migrations/__init__.py
+hobbysite/commissions/migrations/__init__.py
+hobbysite/wiki/migrations/__init__.py
