@@ -7,7 +7,7 @@ class ArticleCategory(models.Model):
     description = models.TextField()
 
     class Meta:
-        ordering = ['name']  # sorted by name ascending
+        ordering = ['name'] 
         verbose_name = 'Article Category'
         verbose_name_plural = 'Article Categories'
 
@@ -34,7 +34,7 @@ class Article(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['-created_on']  # newest first
+        ordering = ['-created_on']  
         verbose_name = 'Article'
         verbose_name_plural = 'Articles'
 
@@ -61,18 +61,17 @@ class Comment(models.Model):
     updated_on = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['created_on']  # oldest first
+        ordering = ['created_on'] 
         verbose_name = 'Comment'
         verbose_name_plural = 'Comments'
 
     def __str__(self):
         return f"Comment by {self.author} on {self.article.title}" 
 
-# Article Image model for image gallery
 class ArticleImage(models.Model):
-    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='images')  # Link to Article
-    image = models.ImageField(upload_to='blog/images/')  # Store images in 'blog/images' folder
-    caption = models.CharField(max_length=255, blank=True, null=True)  # Optional caption for each image
+    article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name='images')  
+    image = models.ImageField(upload_to='blog/images/')  
+    caption = models.CharField(max_length=255, blank=True, null=True)  
     created_on = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
