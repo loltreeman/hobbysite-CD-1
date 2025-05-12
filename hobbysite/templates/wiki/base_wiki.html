@@ -15,32 +15,38 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 100vh;
         }
 
         header {
             background-color: #343a40;
             color: #fff;
-            padding: 15px 0;
+            padding: 20px 0;
             text-align: center;
             width: 100%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         header h1 {
             margin: 0;
-            font-size: 1.8rem;
+            font-size: 2rem;
         }
 
         main {
-            padding: 20px;
+            padding: 30px;
             max-width: 900px;
             margin: 20px auto;
             background-color: #fff;
             border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 90%;
+            text-align: center;
+        }
+
+        section {
+            margin-bottom: 20px;
         }
 
         a {
@@ -56,8 +62,8 @@
 
         .btn {
             display: inline-block;
-            padding: 10px 15px;
-            margin: 10px 0;
+            padding: 12px 20px;
+            margin: 10px 5px;
             background-color: #007bff;
             color: #fff;
             text-align: center;
@@ -76,12 +82,13 @@
 
         footer {
             text-align: center;
-            padding: 10px 0;
+            padding: 15px 0;
             background-color: #343a40;
             color: #fff;
             font-size: 0.9rem;
-            margin-top: 20px;
+            margin-top: auto;
             width: 100%;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
@@ -90,7 +97,9 @@
         <h1>{% block header %}Online Wiki App{% endblock %}</h1>
     </header>
     <main>
-        {% block content %}{% endblock %}
+        <section>
+            {% block content %}{% endblock %}
+        </section>
     </main>
 </body>
 </html>
