@@ -81,6 +81,22 @@ class ThreadCreateView(LoginRequiredMixin, CreateView):
     form_class = ThreadCreateForm
     template_name = 'thread_create.html'
 
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['category'].queryset = ThreadCategory.objects.all()
+        return form
+
+    def post(self, request, *args, **kwargs):
+        post_data = request.POST.copy()
+
+        new_category_name = post_data.get('new_category')
+        if new_category_name:
+            category, created = ThreadCategory.objects.get_or_create(name=new_category_name.strip())
+            post_data['category'] = category.id
+
+        self.request.POST = post_data
+        return super().post(request, *args, **kwargs)
+
     def form_valid(self, form):
         form.instance.author = Profile.objects.get(user=self.request.user)
         return super().form_valid(form)
