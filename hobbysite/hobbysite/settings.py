@@ -35,9 +35,6 @@ DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
-MEDIA_URL = '/media/'  
-MEDIA_ROOT = BASE_DIR / 'media'
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -132,11 +129,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATICFILES_DIRS = [BASE_DIR / env('STATIC_DIR', default='static')]
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 LOGIN_REDIRECT_URL = '/profile/'
 LOGOUT_REDIRECT_URL = '/accounts/login'
