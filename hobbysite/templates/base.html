@@ -1,21 +1,227 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{% block title %}Hobby Site{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Hobby Site{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f5f8fa;
+      margin: 0;
+      padding-top: 70px;
+    }
+
+    .content {
+      padding-top: 80px; 
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    .nav-link {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #657786;
+    }
+
+    .nav-link:hover {
+      background-color: #e1e8ed;
+      border-radius: 20px;
+      color: #1da1f2;
+    }
+
+    .navbar {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand {
+      font-weight: 600;
+      font-size: 1.6rem;
+      color: #1da1f2;
+    }
+
+    .navbar-light .navbar-toggler-icon {
+      background-color: #1da1f2;
+    }
+
+    .navbar-collapse {
+      justify-content: flex-end;
+    }
+
+    .btn-link {
+      color: #1da1f2;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .btn-link:hover {
+      color: #1a91c2;
+    }
+
+    @media (max-width: 991px) {
+      .navbar {
+        box-shadow: none;
+      }
+
+      .content {
+        padding: 2rem;
+      }
+    }
+
+    .welcome-text {
+      font-size: 1rem;
+      color: #333;
+      margin-right: 10px;
+    }
+
+    .navbar-nav .nav-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .navbar-nav .nav-item .btn-custom {
+      background-color: #1da1f2;
+      color: white;
+      font-weight: 600;
+      border-radius: 5px;
+      padding: 8px 15px;
+      font-size: 1rem;
+    }
+
+    .navbar-nav .nav-item .btn-custom:hover {
+      background-color: #1991c7;
+    }
+
+    .popup {
+      position: relative;
+      display: inline-block;
+    }
+
+    .popup-header {
+      display: flex;
+      justify-content: center;
+      align-items: center;    
+      background-color: #2a2a2a;
+      padding: 0.75rem;
+      border-radius: 1rem;
+      width: 100%;
+    }
+
+    .username {
+      color: #fff;
+      font-weight: bold;
+      margin: 0; 
+    }
+
+    .user-icon {
+      width: 30px;
+      height: 30px;
+    }
+
+    .popup-main {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      width: 200px;
+      background-color: #333;
+      padding: 1rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .popup:hover .popup-main {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .list-box {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .button.item {
+      padding: 0.5rem;
+      color: #fff;
+      cursor: pointer;
+      text-align: left;
+      border: none;
+      background: none;
+    }
+
+    .button.item:hover {
+      background-color: #444;
+    }
+  </style>
 </head>
-<body>
-    <header>
-        <h1>Hobby Site</h1>
-    </header>
-    <main>
-        {% block content %}{% endblock %}
-    </main>
-    <footer>
-        <p>&copy; 2025 Hobby Site</p>
-    </footer>
+
+<body class="bg-light text-dark">
+  <nav class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="{% url 'user_management:homepage' %}">Hobby Site</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'user_management:homepage' %}">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'forum:thread_list' %}">Forum</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'commissions:commissions_list' %}">Commissions</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'blog:article_list' %}">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'wiki:article_list' %}">Wiki</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'merchstore:merch_list' %}">Store</a>
+          </li>
+
+          {% if user.is_authenticated %}
+          <div class="popup">
+            <div class="popup-header">
+              <p class="username">Welcome, {{ user.username }}</p>
+            </div>
+            <div class="popup-main">
+              <ul class="list-box">
+                <li class="button item">
+                  <form method="POST" action="{% url 'logout' %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-link nav-link">Logout</button>
+                  </form>
+                </li>
+              </ul>
+            </div>
+          </div>
+          {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'user_management:signup' %}">Sign Up</a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
