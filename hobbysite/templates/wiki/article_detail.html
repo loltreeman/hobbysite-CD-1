@@ -4,7 +4,7 @@
 {% block content %}
 <h1>{{ article.title }}</h1>
 
-{% if article.header_image and article.header_image.url %}
+{% if article.header_image %}
     <img src="{{ article.header_image.url }}" alt="{{ article.title }}" class="img-fluid mb-3">
 {% endif %}
 
