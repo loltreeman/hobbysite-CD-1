@@ -1,29 +1,81 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
+{% block title %}Profile Dashboard{% endblock %}
 
 {% block content %}
 <div class="container py-5">
-    <h2 class="mb-4">Welcome, {{ request.user.username }}!</h2>
-    <p>Welcome to your Hobby Site. You can navigate to the following sections:</p>
-    <ul class="list-group mt-3">
-        <li class="list-group-item">
-            <a href="{% url 'forum:thread_list' %}">Forum</a>
-        </li>
-        <li class="list-group-item">
-            <a href="{% url 'commissions:commissions_list' %}">Commissions</a>
-        </li>
-        <li class="list-group-item">
-            <a href="{% url 'blog:article_list' %}">Blog</a>
-        </li>
-        <li class="list-group-item">
-            <a href="{% url 'wiki:article_list' %}">Wiki</a>
-        </li>
-        <li class="list-group-item">
-            <a href="{% url 'merchstore:merch_list' %}">Store</a>
-        </li>
-        <li class="list-group-item">
-            <a href="{% url 'user_management:profile_dashboard' %}">Profile</a>
-        </li>
-    </ul>
+    <div class="text-center py-4 mb-5" style="background-color: #1da1f2; border-radius: 1rem;">
+        <div class="mx-auto mb-3 rounded-circle shadow" style="width: 80px; height: 80px; background-color: #ffffff;"></div>
+        <h1 class="text-uppercase fw-bold text-white">Welcome to CD1's Hobbysite!</h1>
+        <p class="lead text-white">Hey {{ request.user.username }}! See your activity across the hobbysite below.</p>
+    </div>
+
+    <div class="row align-items-center mb-5">
+        <div class="col-md-4 d-flex justify-content-center mb-3 mb-md-0">
+            <div class="rounded-circle shadow" style="width: 200px; height: 200px; background-color: #e1e8ed;"></div>
+        </div>
+        <div class="col-md-8">
+            <p class="fs-5 text-secondary">
+                Welcome to your profile dashboard! 
+                Here is everything you've posted so far:
+            </p>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-sm-6 col-lg-4 col-xl-3">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Items in Cart</h5>
+                    <a href="{% url 'merchstore:merch_cart' %}" class="btn btn-outline-primary">Go to Cart</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-4 col-xl-3">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Your Products</h5>
+                    <a href="{% url 'merchstore:merch_list' %}" class="btn btn-outline-primary">View Listings</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-4 col-xl-3">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Blog Articles</h5>
+                    <a href="{% url 'blog:article_list' %}" class="btn btn-outline-primary">View Articles</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-4 col-xl-3">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Wiki Articles</h5>
+                    <a href="{% url 'wiki:article_list' %}" class="btn btn-outline-primary">View Articles</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-4 col-xl-3">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Forum Threads</h5>
+                    <a href="{% url 'forum:thread_list' %}" class="btn btn-outline-primary">View</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6 col-lg-4 col-xl-3">
+            <div class="card text-center h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">Commissions Joined</h5>
+
+                    <a href="{% url 'commissions:commissions_list' %}" class="btn btn-outline-primary">View</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
