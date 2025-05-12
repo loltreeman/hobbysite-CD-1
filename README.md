@@ -1,7 +1,7 @@
 # hobbysite-CD-1
 
-Biason, Neil Aldous <br> 
-Fang, Axel <br> 
-De Luna, Matt <br> 
-Naguio, Christian <br> 
-Ramoy, Lorenzo Uriel
+Biason, Neil Aldous - Wiki <br> 
+Fang, Axel - Forum <br> 
+De Luna, Matt - Commissions <br> 
+Naguio, Christian - Blog <br> 
+Ramoy, Lorenzo Uriel - Merchstore
