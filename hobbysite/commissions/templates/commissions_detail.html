@@ -6,15 +6,32 @@
     <h1>{{ commission.title }}</h1>
     <ul>
         <li>Description: {{ commission.description }}</li>
-        <li>People Required: {{ commission.people_required }}</li>
-        <li>Created On: {{ commission.created_on }}</li>
-        <li>Last Updated: {{ commission.updated_on }}</li>
     </ul>
 
-    <h2>Comments</h2>
+    {% if is_owner %}
+        <a href="{% url 'commissions:update_commissions' commission.pk %}">Edit Commission</a>
+    {% endif %}
+
+    <h2>Jobs</h2>
     <ul>
-        {% for comment in commission.comments.all %}
-            <li>{{ comment.entry }} - Made: {{ comment.created_on }} - Last Updated: {{ comment.updated_on }} </li>
+        {% for job in jobs %}
+        <li>
+            <a href="{% url 'commissions:job_view' job.id %}">{{ job.role }} - {{ job.manpower_required }} person(s) required</a>
+            {% if job in full_jobs %}
+                <b>Already Full!</b>
+                <form method="post" action="{% url 'commissions:apply_to_job' job.id %}">
+                    {% csrf_token %}
+                    <button type="submit" disabled>Apply To Job</button>
+                    </form>
+            {% elif user.is_authenticated %}
+                <form method="post" action="{% url 'commissions:apply_to_job' job.id %}">
+                {% csrf_token %}
+                <button type="submit">Apply To Job</button>
+                </form>
+            {% endif %}
+            </li>
+            {% empty %}
+            <li>No applicants yet.</li>
         {% endfor %}
     </ul>
     <footer>
