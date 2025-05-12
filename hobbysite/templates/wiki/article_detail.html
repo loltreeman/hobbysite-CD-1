@@ -3,62 +3,21 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block content %}
-<h1>{{ article.title }}</h1>
-
-{% if article.header_image %}
-    <img src="{{ article.header_image.url }}" alt="{{ article.title }}" class="img-fluid mb-3">
 {% endif %}
-
-<p><strong>Category:</strong> {{ article.category.name }}</p>
-<p><strong>Author:</strong> {{ article.author }}</p>
-<p><strong>Created on:</strong> {{ article.created_on|date:"F j, Y" }}</p>
-<p><strong>Last updated:</strong> {{ article.updated_on|date:"F j, Y" }}</p>
-
-<hr>
-
-<p>{{ article.entry }}</p>
-
-{% if user.is_authenticated and user.profile == article.author %}
-    <a href="{% url 'wiki:article_update' article.pk %}" class="btn btn-primary">Edit Article</a>
-{% endif %}
-
-<hr>
-
-<h2>Other Articles in {{ article.category.name }}</h2>
-<ul>
-    {% for related_article in related_articles %}
-        <li>
-            <a href="{{ related_article.get_absolute_url }}">{{ related_article.title }}</a>
-        </li>
-    {% empty %}
-        <p>No other articles in this category.</p>
-    {% endfor %}
-</ul>
-
-<hr>
-
-<h2>Comments</h2>
-<ul>
-    {% for comment in comments %}
-        <li>
-            <strong>{{ comment.author }}</strong> ({{ comment.created_on|date:"F j, Y, g:i a" }}):
-            <p>{{ comment.entry }}</p>
-        </li>
-    {% empty %}
-        <p>No comments yet.</p>
-    {% endfor %}
-</ul>
-
-{% if user.is_authenticated %}
-    <h3>Add a Comment</h3>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Submit Comment</button>
-    </form>
-{% else %}
-    <p><a href="{% url 'login' %}">Login</a> to add a comment.</p>
-{% endif %}
-
-<a href="{% url 'wiki:article_list' %}" class="btn btn-secondary">Back to Articles</a>
+<div class="container mt-5">
+    <h1 class="mb-4">{{ article.title }}</h1>
+    {% if article.header_image %}
+        <img src="{{ article.header_image.url }}" alt="{{ article.title }}" class="img-fluid rounded mb-4">
+    {% endif %}
+    <p><strong>Category:</strong> {{ article.category.name }}</p>
+    <p><strong>Author:</strong> {{ article.author }}</p>
+    <p><strong>Created on:</strong> {{ article.created_on|date:"F j, Y" }}</p>
+    <p><strong>Last updated:</strong> {{ article.updated_on|date:"F j, Y" }}</p>
+    <hr>
+    <p>{{ article.entry }}</p>
+    {% if user.is_authenticated and user.profile == article.author %}
+        <a href="{% url 'wiki:article_update' article.pk %}" class="btn btn-primary">Edit Article</a>
+    {% endif %}
+    <a href="{% url 'wiki:article_list' %}" class="btn btn-secondary mt-3">Back to Articles</a>
+</div>
 {% endblock %}
