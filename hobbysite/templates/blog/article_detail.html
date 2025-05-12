@@ -14,7 +14,7 @@
   <p class="text-muted text-center mb-4">By {{ object.author }} on {{ object.created_on }}</p>
 
   {% if object.header_image %}
-    <img src="{{ % static object.header_image }}" alt="{{ object.title }}" class="img-fluid rounded mb-4">
+    <img src="{{ % static object.header_image.url }}" alt="{{ object.title }}" class="img-fluid rounded mb-4">
   {% endif %}
 
   <div class="card mb-4">
@@ -35,7 +35,7 @@
       {% for image in article_images %}
         <div class="col-md-4 mb-3">
           <div class="card">
-            <img src="{{ % static image.image }}" class="card-img-top" alt="{{ image.caption }}">
+            <img src="{{ % staticimage.image.url }}" class="card-img-top" alt="{{ image.caption }}">
             {% if image.caption %}
               <div class="card-body">
                 <p class="card-text text-center text-muted">{{ image.caption }}</p>
