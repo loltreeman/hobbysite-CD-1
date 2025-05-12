@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
-from .models import ArticleCategory, Article, Comment, Profile  # Assuming Profile is related to Article as well
+from .models import ArticleCategory, Article, Comment, Profile  
 
 # Register your models here.
 
