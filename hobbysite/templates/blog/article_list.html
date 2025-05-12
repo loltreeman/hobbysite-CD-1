@@ -17,7 +17,7 @@
             <a href="{{ article.get_absolute_url }}" class="text-decoration-none text-dark">
                 <div class="card shadow-sm h-100">
                     {% if article.header_image %}
-                        <img src="{{ % static article.header_image.url }}" class="card-img-top" alt="{{ article.title }}" style="height: 200px; object-fit: cover;">
+                        <img src="{% static article.header_image %}" class="card-img-top" alt="{{ article.title }}" style="height: 200px; object-fit: cover;">
                     {% endif %}
                     <div class="card-body">
                         <h5 class="card-title">{{ article.title }}</h5>
@@ -40,7 +40,7 @@
                 <a href="{{ article.get_absolute_url }}" class="text-decoration-none text-dark">
                     <div class="card shadow-sm h-100">
                         {% if article.header_image %}
-                            <img src="{{ % static article.header_image.url }}" class="card-img-top" alt="{{ article.title }}" style="height: 200px; object-fit: cover;">
+                            <img src="{% static article.header_image %}" class="card-img-top" alt="{{ article.title }}" style="height: 200px; object-fit: cover;">
                         {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">{{ article.title }}</h5>
