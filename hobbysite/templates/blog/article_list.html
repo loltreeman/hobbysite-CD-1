@@ -1,0 +1,58 @@
+{% extends 'blog/base_blog.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center mb-4">Article List</h1>
+
+    <div class="text-center mb-4">
+        <a href="{% url 'blog:article_add' %}" class="btn btn-primary">
+            Add New Article
+        </a>
+    </div>
+
+    <h2>Your Articles</h2>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 mb-5">
+        {% for article in user_articles %}
+        <div class="col">
+            <a href="{{ article.get_absolute_url }}" class="text-decoration-none text-dark">
+                <div class="card shadow-sm h-100">
+                    {% if article.header_image %}
+                        <img src="{{ article.header_image.url }}" class="card-img-top" alt="{{ article.title }}" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ article.title }}</h5>
+                        <p class="card-text text-muted">{{ article.category }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% empty %}
+        <p class="text-center">You have no articles yet.</p>
+        {% endfor %}
+    </div>
+
+    <h2>All Articles</h2>
+    {% for category, articles in grouped_articles %}
+        <h3 class="mt-4">{{ category.name }}</h3>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for article in articles %}
+            <div class="col">
+                <a href="{{ article.get_absolute_url }}" class="text-decoration-none text-dark">
+                    <div class="card shadow-sm h-100">
+                        {% if article.header_image %}
+                            <img src="{{ article.header_image.url }}" class="card-img-top" alt="{{ article.title }}" style="height: 200px; object-fit: cover;">
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ article.title }}</h5>
+                            <p class="card-text text-muted">{{ article.category }}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    {% empty %}
+        <p class="text-center">There are no articles from other users yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

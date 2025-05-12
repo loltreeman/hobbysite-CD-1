@@ -1,0 +1,23 @@
+{% extends 'merchstore/base_merchStore.html' %}
+
+{% block title %}Merch Store{% endblock %}
+
+{% block content %}
+
+<b>Add Product Type</b>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ productType_form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+
+<b>Add Product</b>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ product_form.as_p }}
+    <input type="submit" value="Submit">
+</form>
+
+
+
+{% endblock %}
