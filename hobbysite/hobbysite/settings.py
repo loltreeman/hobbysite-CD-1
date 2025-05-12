@@ -27,13 +27,13 @@ env = environ.Env(
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', default='django-insecure-bqy%3qw^ex%5w140b-p7%xxi_1j(^y6qgcr2q-1&v$fdvgu(f6')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['django-hobbysite-5yo65.ondigitalocean.app']
 
 # Application definition
 
