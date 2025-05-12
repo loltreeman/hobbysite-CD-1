@@ -28,7 +28,7 @@ def commissions_list(request):
             'applied_commissions': applied_commissions,
             'commissions': commissions
     }
-    return render(request, 'commissions_list.html', ctx)
+    return render(request, 'commissions/commissions_list.html', ctx)
     
 def commissions_detail(request, id):
     commission = Commission.objects.get(id=id)
@@ -54,7 +54,7 @@ def commissions_detail(request, id):
         'is_owner': is_owner,
         'full_jobs': full_jobs
         }
-    return render(request, 'commissions_detail.html', ctx)
+    return render(request, 'commissions/commissions_detail.html', ctx)
 
 @login_required
 def apply_to_job(request, job_id):
@@ -77,7 +77,7 @@ def create_view(request):
             return redirect('commissions:commissions_detail', id=commission.id)
     
     ctx = { 'form': form}
-    return render(request, 'create_commission.html', ctx)
+    return render(request, 'commissions/create_commission.html', ctx)
 
 @login_required
 def update_view(request, id):
@@ -101,7 +101,7 @@ def update_view(request, id):
         form = CommissionForm(instance=commission)
     
     ctx = { 'form': form, 'commission':commission}
-    return render(request, 'update_commission.html', ctx)
+    return render(request, 'commissions/update_commission.html', ctx)
 
 @login_required
 def job_view(request, job_id):
@@ -128,7 +128,7 @@ def job_view(request, job_id):
         'applicants': applicants,
     }
 
-    return render(request, 'job.html', ctx)
+    return render(request, 'commissions/job.html', ctx)
 
 @login_required
 def create_job(request, commission_id):
@@ -145,7 +145,7 @@ def create_job(request, commission_id):
         
     
     ctx = { 'form': form}
-    return render(request, 'create_job.html', ctx)
+    return render(request, 'commissions/create_job.html', ctx)
     
 
 
