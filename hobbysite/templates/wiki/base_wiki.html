@@ -12,6 +12,11 @@
             margin: 0;
             padding: 0;
             line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
         }
 
         header {
@@ -19,6 +24,7 @@
             color: #fff;
             padding: 15px 0;
             text-align: center;
+            width: 100%;
         }
 
         header h1 {
@@ -34,14 +40,17 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 90%;
         }
 
         a {
             color: #007bff;
             text-decoration: none;
+            transition: color 0.3s ease;
         }
 
         a:hover {
+            color: #0056b3;
             text-decoration: underline;
         }
 
@@ -57,10 +66,12 @@
             cursor: pointer;
             text-decoration: none;
             font-size: 1rem;
+            transition: background-color 0.3s ease, transform 0.2s ease;
         }
 
         .btn:hover {
             background-color: #0056b3;
+            transform: scale(1.05);
         }
 
         footer {
@@ -70,6 +81,7 @@
             color: #fff;
             font-size: 0.9rem;
             margin-top: 20px;
+            width: 100%;
         }
     </style>
 </head>
