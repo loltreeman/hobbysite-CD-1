@@ -143,12 +143,15 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATICFILES_DIRS = [BASE_DIR / env('STATIC_DIR', default='static')]
+STATICFILES_DIRS = [BASE_DIR / env('STATIC_DIR')]
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  # Ensure this is set for production
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+if not DEBUG:
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 LOGIN_REDIRECT_URL = '/post-login-redirect/'
 LOGOUT_REDIRECT_URL = '../../accounts/login'
