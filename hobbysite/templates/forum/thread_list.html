@@ -12,7 +12,7 @@
                 <p><i>{{ category.description }}</i></p>
 
                 {% if threads %}
-                    <table border="1" style="width: 80%; border-collapse: collapse; border: 3px solid black;">
+                    <table class="forum-table">
                         <thead>
                             <tr>
                                 <th style="width: 40%; text-align: center;">Post</th>
@@ -76,6 +76,6 @@
         <p>No threads available.</p>
     {% endif %}
 
-    <p><a href="{% url 'forum:thread_create' %}">Create a New Thread</a></p>
+    <p><a href="{% url 'forum:thread_create' %}" class="create-thread-link">Create a New Thread</a></p>
 {% endif %}
 {% endblock %}

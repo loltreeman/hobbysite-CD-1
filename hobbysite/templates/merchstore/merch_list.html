@@ -3,26 +3,39 @@
 {% block title %}Merch Store{% endblock %}
 
 {% block content %}
-    <h1 class="text-center mb-4">Merch Store</h1>
-    <ul class="text-center mb-4">
-        <div class="box text-center mb-4">
-        <h2>Your Products</h2>
-        {% for user_products in user_products %}
-            
-                <a href="{% url 'merchstore:merch_detail' user_products.pk %}" >{{ user_products.name }} </a> - {{user_products.status}}
-            <br>
-        {% endfor %}
+<h1 class="text-center mb-5">Merch Store</h1>
+
+<div class="container">
+  <div class="merch-section mb-5">
+    <h2>Your Products</h2>
+    {% if user_products %}
+      {% for product in user_products %}
+        <div class="merch-card">
+          <a href="{% url 'merchstore:merch_detail' product.pk %}" class="merch-name">{{ product.name }}</a>
+          <span class="status-badge">{{ product.status }}</span>
         </div>
-        <div class="box text-center mb-4">
-        <h2>Other Products</h2>
-        {% for other_products in other_products%}
-                <a href="{% url 'merchstore:merch_detail' other_products.pk %}" >{{ other_products.name }} </a> -  {{other_products.status}}
-            <br>
-        {% endfor %}
+      {% endfor %}
+    {% else %}
+      <p>You have no products.</p>
+    {% endif %}
+  </div>
+
+  <div class="merch-section mb-5">
+    <h2>Other Products</h2>
+    {% if other_products %}
+      {% for product in other_products %}
+        <div class="merch-card">
+          <a href="{% url 'merchstore:merch_detail' product.pk %}" class="merch-name">{{ product.name }}</a>
+          <span class="status-badge">{{ product.status }}</span>
         </div>
-        <br>
-        <h3>
-        <a href="{% url 'merchstore:merch_create'%}">Create Product</a> 
-    </h3>
-    </ul>
+      {% endfor %}
+    {% else %}
+      <p>No other products available.</p>
+    {% endif %}
+  </div>
+
+  <div class="text-center mt-4">
+    <a href="{% url 'merchstore:merch_create' %}" class="btn btn-primary create-btn">Create Product</a>
+  </div>
+</div>
 {% endblock %}
