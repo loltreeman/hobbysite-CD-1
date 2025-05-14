@@ -33,7 +33,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['django-hobbysite-5yo65.ondigitalocean.app']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'django-hobbysite-5yo65.ondigitalocean.app']
 
 # Application definition
 
