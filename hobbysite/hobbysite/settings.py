@@ -11,9 +11,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 import os
-from pathlib import Path
-from urllib.parse import urlparse
 import environ
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -22,7 +21,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 env = environ.Env(
-    DEBUG=(bool, True)
+    DEBUG=(bool, False)
 )
 
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
@@ -30,10 +29,11 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://django-hobbysite-5yo65.ondigitalocean.app/']
+ALLOWED_HOSTS = ['django-hobbysite-5yo65.ondigitalocean.app']
 
 # Application definition
 
@@ -67,7 +67,7 @@ ROOT_URLCONF = 'hobbysite.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -88,7 +88,10 @@ WSGI_APPLICATION = 'hobbysite.wsgi.application'
 
 # PostgreSQL Database
 
+from urllib.parse import urlparse
+
 DATABASE_URL = os.environ.get('DATABASE_URL')
+
 db_info = urlparse(DATABASE_URL)
 
 DATABASES = {
@@ -139,29 +142,21 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
+
+STATICFILES_DIRS = [BASE_DIR / env('STATIC_DIR', default='static')]
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-if not DEBUG:
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-
-
-# Redirect URLs
-LOGIN_REDIRECT_URL = '/post-login-redirect/'
-LOGOUT_REDIRECT_URL = '../../accounts/login'
-
+LOGIN_REDIRECT_URL = '/profile/'
+LOGOUT_REDIRECT_URL = '/accounts/login'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-# Email configuration
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
