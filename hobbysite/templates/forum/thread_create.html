@@ -8,12 +8,26 @@
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
-    {{ form.title.label_tag }} {{ form.title }}
-    {{ form.content.label_tag }} {{ form.content }}
-    {{ form.category.label_tag }} {{ form.category }}
+    <div class="mb-3">
+        {{ form.title.label_tag }}{{ form.title }}
+    </div>
 
+    <div class="mb-3">
+        {{ form.category.label_tag }}{{ form.category }}
+    </div>
+
+    <div class="mb-3">
     <p><strong>Or add a new category:</strong></p>
-    <input type="text" name="new_category" placeholder="Enter new category name" class="form-control mb-3">
+        <input type="text" name="new_category" placeholder="Enter new category name" class="form-control">
+    </div>
+
+    <div class="mb-3">
+        {{ form.entry.label_tag }}{{ form.entry }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.header_image.label_tag }}{{ form.header_image }}
+    </div>
 
     <button type="submit" class="btn btn-primary">Create Thread</button>
 </form>

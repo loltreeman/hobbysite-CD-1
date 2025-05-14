@@ -3,13 +3,16 @@
 {% block title %}Create New Article{% endblock %}
 
 {% block content %}
-<h1>Create a New Article</h1>
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Create a New Article</h1>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Create Article</button>
-</form>
-
-<a href="{% url 'wiki:article_list' %}" class="btn btn-secondary">Back to Articles</a>
+    <form method="post" enctype="multipart/form-data" class="border p-4 rounded bg-light shadow-sm">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="d-flex justify-content-between mt-3">
+            <button type="submit" class="btn btn-primary">Create Article</button>
+            <a href="{% url 'wiki:article_list' %}" class="btn btn-secondary">Back to Articles</a>
+        </div>
+    </form>
+</div>
 {% endblock %}
