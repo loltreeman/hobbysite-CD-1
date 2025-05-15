@@ -20,31 +20,39 @@ def merchList(request):
 @login_required
 def merchDetail(request, pk):
     merch = get_object_or_404(Product, pk=pk)
-
-    if merch.owner == request.user.profile:
-        can_purchase = False
-    else:
-        can_purchase = True
+    can_purchase = (merch.owner != request.user.profile) and merch.stock > 0
 
     if request.method == 'POST':
-        transactForm = TransactionForm(request.POST)
-        if transactForm.is_valid():
-            transaction = transactForm.save(commit=False)
-            transaction.product = merch
-            transaction.buyer = request.user.profile
-            transaction.status = 'on_cart'
+        transact_form = TransactionForm(request.POST)
+        if transact_form.is_valid():
+            amount = transact_form.cleaned_data['amount']
 
-            merch.stock -= transaction.amount
-            if merch.stock == 0:
-                 merch.status = 'out_of_stock'
-                 can_purchase = False
-            merch.save()
-            transaction.save()
-        return redirect('merchstore:merch_cart')
+            if amount > merch.stock:
+                transact_form.add_error(
+                    'amount',
+                    f'You can only buy {merch.stock} item{"s" if merch.stock != 1 else ""} or less.'
+                )
+            else:
+                transaction = transact_form.save(commit=False)
+                transaction.product = merch
+                transaction.buyer = request.user.profile
+                transaction.status = 'on_cart'
+
+                merch.stock -= amount
+                if merch.stock == 0:
+                    merch.status = 'out_of_stock'
+                    can_purchase = False
+                merch.save()
+                transaction.save()
+                return redirect('merchstore:merch_cart')
     else:
-            transactForm = TransactionForm(request.POST)
-    ctx = {"merch": merch , "transact_form" : transactForm, "can_purchase":can_purchase}
-    return render(request, "merchstore/merch_detail.html", ctx)
+        transact_form = TransactionForm()
+
+    return render(request, 'merchstore/merch_detail.html', {
+        'merch': merch,
+        'transact_form': transact_form,
+        'can_purchase': can_purchase,
+    })
 
 @login_required
 def merchCreate(request):

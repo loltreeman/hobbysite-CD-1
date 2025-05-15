@@ -2,7 +2,10 @@
 {% block title %}{{ article.title }}{% endblock %}
 
 {% block content %}
+<<<<<<< Updated upstream
 {% load static %}
+=======
+>>>>>>> Stashed changes
 <div class="container mt-5">
     <h1 class="text-center mb-4">{{ article.title }}</h1>
 
@@ -40,6 +43,7 @@
 
     <hr>
 
+<<<<<<< Updated upstream
     <h2>Add a Comment</h2>
     {% if user.is_authenticated %}
         <form method="post" class="border p-4 rounded bg-light shadow-sm mb-4">
@@ -63,6 +67,47 @@
         {% endfor %}
     </ul>
 
+=======
+    {% if gallery %}
+        <h2>Image Gallery</h2>
+        <div class="row">
+            {% for img in gallery_images %}
+                <div class="col-md-4 mb-3">
+                    <img src="{{ img.image.url }}" alt="Gallery Image" class="img-fluid rounded shadow-sm">
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No images in the gallery.</p>
+    {% endif %}
+
+    <hr>
+
+
+    <h2>Add a Comment</h2>
+    {% if user.is_authenticated %}
+        <form method="post" class="border p-4 rounded bg-light shadow-sm mb-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit Comment</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}" class="btn btn-secondary">Login</a> to add a comment.</p>
+    {% endif %}
+
+    <h2>Comments</h2>
+    <ul class="list-unstyled">
+        {% for comment in comments %}
+            <li class="mb-3">
+                <strong>{{ comment.author }}</strong> ({{ comment.created_on|date:"F j, Y, g:i a" }}):
+                <p>{{ comment.entry }}</p>
+            </li>
+        {% empty %}
+            <p>No comments yet.</p>
+        {% endfor %}
+    </ul>
+
+>>>>>>> Stashed changes
     <a href="{% url 'wiki:article_list' %}" class="btn btn-secondary mt-3">Back to Articles</a>
 </div>
 {% endblock %}

@@ -50,3 +50,12 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.author} on {self.article}"
+    
+class ArticleImage(models.Model):
+    article = models.ForeignKey('Article', related_name='images', on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='article_images/')
+    caption = models.CharField(max_length=255, blank=True)
+
+    def __str__(self):
+        return f"Image for {self.article.title}"
+

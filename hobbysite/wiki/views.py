@@ -57,7 +57,9 @@ class ArticleDetailView(FormMixin, DetailView):
             category=article.category
         ).exclude(pk=article.pk)[:2]
 
-        context["comments"] = article.wiki_comments.order_by("-created_on")  # Correct related name for comments
+        context["comments"] = article.wiki_comments.order_by("-created_on")
+        context["gallery_images"] = article.images.all() 
+
         if self.request.user.is_authenticated:
             context["form"] = self.get_form()
         else:
@@ -65,10 +67,10 @@ class ArticleDetailView(FormMixin, DetailView):
 
         user = self.request.user
         context["is_owner"] = user.is_authenticated and hasattr(user, "profile") and article.author == user.profile
-
         context["back_to_list_url"] = reverse("wiki:article_list")
 
         return context
+
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()

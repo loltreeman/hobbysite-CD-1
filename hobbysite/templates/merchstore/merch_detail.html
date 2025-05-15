@@ -1,35 +1,43 @@
 {% extends 'base.html' %}
 
-{% block title %}Merch Store{% endblock %}
+{% block title %}{{ merch.name }} - Merch Store{% endblock %}
 
 {% block content %}
+<div class="container">
+  <a class="btn btn-link mb-3" href="{% url 'merchstore:merch_list' %}">&larr; Back to Store</a>
 
+  <div class="card mb-4">
+    {% if merch.image %}
+      <img src="{{ merch.image.url }}" class="card-img-top img-fluid" alt="{{ merch.name }}">
+    {% endif %}
+    <div class="card-body">
+      <h2 class="card-title">{{ merch.name }}</h2>
+      <p class="text-muted mb-1">Product Type: {{ merch.product_type.name }}</p>
+      <p class="text-muted mb-3">Owner: {{ merch.owner }}</p>
+      <p class="card-text">Description: {{ merch.description }}</p>
+      <ul class="list-group list-group-flush my-3">
+        <li class="list-group-item">Price: <strong>${{ merch.price }}</strong></li>
+        <li class="list-group-item">Stock: <strong>{{ merch.stock }}</strong></li>
+        <li class="list-group-item">Status: <strong>{{ merch.status }}</strong></li>
+      </ul>
 
-    <h1>{{merch.name}}</h1>
-    <u1>
-            
-            <li>Product Type:  {{ merch.product_type.name }}</li>
-            <li>Name: {{ merch.name }} </li>
-            <li>Owner: {{merch.owner}}</li>
-            <li>Description: {{ merch.description }} </li>
-            <li>Price: ${{ merch.price }}</li>
-            <li>Stock: {{merch.stock}}</li>
-            <li>Status: {{merch.status}}</li>
-            {% if can_purchase == False %}
-             <a href="{% url 'merchstore:merch_update' merch.pk %}"> Update</a>
-            {% endif %}
-            <br> 
+      <div class="d-flex justify-content-between align-items-center">
+        {% if user.is_authenticated and merch.owner == user.profile %}
+          <a href="{% url 'merchstore:merch_update' merch.pk %}" class="btn btn-outline-secondary">Edit Product</a>
+        {% endif %}
 
-
-            {% if can_purchase and merch.stock > 0 %}
-            <form method="post">
-                {% csrf_token %}
-                {{ transact_form.as_p }}
-                <button type="submit">Buy</button>
-            </form>
-            {% else %}
-                <button disabled>Not Available for Purchase</button>
-            {% endif %}
-            
-    </u1>
+        {% if can_purchase and merch.stock > 0 %}
+          <form method="post" class="d-inline-block">
+            {% csrf_token %}
+            {{ transact_form.amount.label_tag }}
+            {{ transact_form.amount }}
+            <button type="submit" class="btn btn-primary ms-2">Buy</button>
+          </form>
+        {% else %}
+          <button class="btn btn-secondary" disabled>Not Available for Purchase</button>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

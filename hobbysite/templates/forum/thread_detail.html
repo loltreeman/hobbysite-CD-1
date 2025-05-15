@@ -1,60 +1,82 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container">
+  <a class="btn btn-link mb-3" href="{% url 'forum:thread_list' %}">&larr; Back</a>
 
-<a href="{% url 'forum:thread_list' %}">&larr; Back</a>
+  <div class="card mb-4">
+    {% if thread.header_image %}
+      <img src="{{ thread.header_image.url }}" class="card-img-top img-fluid" alt="{{ thread.title }}">
+    {% endif %}
+    <div class="card-body">
+      <h1 class="card-title">{{ thread.title }}</h1>
+      <p class="text-muted">By {{ thread.author }} on {{ thread.created_on|date:"M d, Y H:i" }}</p>
+      <p class="card-text">{{ thread.entry|linebreaks }}</p>
+      {% if user.is_authenticated and user == thread.author %}
+        <a href="{% url 'forum:thread_update' thread.pk %}" class="btn btn-sm btn-outline-primary">Edit Thread</a>
+      {% endif %}
+    </div>
+  </div>
 
-<h1>{{ thread.title }}</h1>
-<p>By {{ thread.author }} on {{ thread.created_on|date:"M d, Y H:i" }}</p>
+  <div class="mb-4">
+    <h3>More in {{ thread.category.name }}</h3>
+    <ul class="list-group">
+      {% for related_thread in related_threads %}
+        <li class="list-group-item"><a href="{% url 'forum:thread_detail' related_thread.pk %}">{{ related_thread.title }}</a></li>
+      {% empty %}
+        <li class="list-group-item">No other threads for {{ thread.category.name }}</li>
+      {% endfor %}
+    </ul>
+  </div>
 
-{% if thread.header_image %}
-  <img src="{{ thread.header_image.url }}" alt="{{ thread.title }} image">
-{% else %}
-  <p>No image available</p>
-{% endif %}
+  <nav aria-label="Thread navigation" class="mb-4">
+    <ul class="pagination justify-content-between">
+      <li class="page-item {% if not previous_thread %}disabled{% endif %}">
+        {% if previous_thread %}
+          <a class="page-link" href="{% url 'forum:thread_detail' previous_thread.pk %}">&larr; Previous</a>
+        {% else %}
+          <span class="page-link">&larr; Previous</span>
+        {% endif %}
+      </li>
+      <li class="page-item {% if not next_thread %}disabled{% endif %}">
+        {% if next_thread %}
+          <a class="page-link" href="{% url 'forum:thread_detail' next_thread.pk %}">Next &rarr;</a>
+        {% else %}
+          <span class="page-link">Next &rarr;</span>
+        {% endif %}
+      </li>
+    </ul>
+  </nav>
 
-<p>{{ thread.entry|linebreaks }}</p>
+  <div class="card mb-4">
+    <div class="card-header">Leave a Comment</div>
+    <div class="card-body">
+      {% if user.is_authenticated %}
+      <form method="post">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit" class="btn btn-primary">Post</button>
+      </form>
+      {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to comment.</p>
+      {% endif %}
+    </div>
+  </div>
 
-{% if user.is_authenticated and user == thread.author %}
-  <a href="{% url 'forum:thread_update' thread.pk %}">Edit Thread</a>
-{% endif %}
-
-<h3>More in {{ thread.category.name }}</h3>
-<ul>
-  {% for related_thread in related_threads %}
-    <li><a href="{% url 'forum:thread_detail' related_thread.pk %}">{{ related_thread.title }}</a></li>
-  {% empty %}
-    <li>No other threads for {{ thread.category.name }}</li>
-  {% endfor %}
-</ul>
-
-<h2>Comments</h2>
-<ul>
-  {% for comment in comments %}
-    <li>
-      <strong>{{ comment.author }}</strong> on {{ comment.created_on|date:"M d, Y H:i" }}<br>
-      {{ comment.entry|linebreaks }}
-    </li>
-  {% empty %}
-    <li>No comments yet.</li>
-  {% endfor %}
-</ul>
-
-{% if previous_thread %}
-  <a href="{% url 'forum:thread_detail' previous_thread.pk %}">&larr; Previous</a>
-{% endif %}
-{% if next_thread %}
-  <a href="{% url 'forum:thread_detail' next_thread.pk %}">Next &rarr;</a>
-{% endif %}
-
-<h2>Leave a Comment</h2>
-{% if user.is_authenticated %}
-  <form method="post">{% csrf_token %}
-    {{ comment_form.as_p }}
-    <button type="submit">Post</button>
-  </form>
-{% else %}
-  <a href="{% url 'login' %}">Log in</a> to comment.
-{% endif %}
-
+  <div>
+    <h2>Comments</h2>
+    {% for comment in comments %}
+      <div class="card mb-3">
+        <div class="card-body">
+          <h6 class="card-subtitle mb-2 text-muted">
+            <strong>{{ comment.author }}</strong> on {{ comment.created_on|date:"M d, Y H:i" }}
+          </h6>
+          <p class="card-text">{{ comment.entry|linebreaks }}</p>
+        </div>
+      </div>
+    {% empty %}
+      <p>No comments yet.</p>
+    {% endfor %}
+  </div>
+</div>
 {% endblock %}
