@@ -3,6 +3,7 @@
 {% block title %}Wiki App - Articles{% endblock %}
 
 {% block content %}
+{% load static %}
 <div class="container mt-5">
     <h1 class="text-center mb-4">Welcome, {{ request.user.profile }}</h1>
 
@@ -12,6 +13,22 @@
         {% else %}
             <a href="{% url 'login' %}" class="btn btn-secondary">Login to Create Articles</a>
         {% endif %}
+    </div>
+
+    <hr>
+
+    <h2>Article Image Gallery</h2>
+    <div class="row">
+        {% for article in grouped_articles.values|flatten %}
+            {% if article.header_image %}
+                <div class="col-md-4 mb-4">
+                    <a href="{{ article.get_absolute_url }}">
+                        <img src="{{ article.header_image.url }}" alt="{{ article.title }}" class="img-fluid rounded shadow-sm">
+                    </a>
+                    <p class="text-center mt-2">{{ article.title }}</p>
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
 
     <hr>
