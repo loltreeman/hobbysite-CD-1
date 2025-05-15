@@ -42,7 +42,6 @@
 
     <hr>
 
-<<<<<<< Updated upstream
     <h2>Add a Comment</h2>
     {% if user.is_authenticated %}
         <form method="post" class="border p-4 rounded bg-light shadow-sm mb-4">
@@ -78,32 +77,6 @@
     {% else %}
         <p>No images in the gallery.</p>
     {% endif %}
-
-    <hr>
-
-
-    <h2>Add a Comment</h2>
-    {% if user.is_authenticated %}
-        <form method="post" class="border p-4 rounded bg-light shadow-sm mb-4">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Submit Comment</button>
-        </form>
-    {% else %}
-        <p><a href="{% url 'login' %}" class="btn btn-secondary">Login</a> to add a comment.</p>
-    {% endif %}
-
-    <h2>Comments</h2>
-    <ul class="list-unstyled">
-        {% for comment in comments %}
-            <li class="mb-3">
-                <strong>{{ comment.author }}</strong> ({{ comment.created_on|date:"F j, Y, g:i a" }}):
-                <p>{{ comment.entry }}</p>
-            </li>
-        {% empty %}
-            <p>No comments yet.</p>
-        {% endfor %}
-    </ul>
 
     <a href="{% url 'wiki:article_list' %}" class="btn btn-secondary mt-3">Back to Articles</a>
 </div>
