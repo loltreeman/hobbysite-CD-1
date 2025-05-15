@@ -39,6 +39,17 @@
 
     <hr>
 
+    <h2>Add a Comment</h2>
+    {% if user.is_authenticated %}
+        <form method="post" class="border p-4 rounded bg-light shadow-sm mb-4">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn btn-primary">Submit Comment</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}" class="btn btn-secondary">Login</a> to add a comment.</p>
+    {% endif %}
+
     <h2>Comments</h2>
     <ul class="list-unstyled">
         {% for comment in comments %}
@@ -50,17 +61,6 @@
             <p>No comments yet.</p>
         {% endfor %}
     </ul>
-
-    {% if user.is_authenticated %}
-        <h3>Add a Comment</h3>
-        <form method="post" class="border p-4 rounded bg-light shadow-sm">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit" class="btn btn-primary">Submit Comment</button>
-        </form>
-    {% else %}
-        <p><a href="{% url 'login' %}" class="btn btn-secondary">Login</a> to add a comment.</p>
-    {% endif %}
 
     <a href="{% url 'wiki:article_list' %}" class="btn btn-secondary mt-3">Back to Articles</a>
 </div>

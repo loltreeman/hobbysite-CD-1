@@ -13,9 +13,6 @@ class ArticleListView(ListView):
     template_name = "wiki/article_list.html"
     context_object_name = "articles"
 
-    def get_queryset(self):
-        return Article.objects.select_related("category").order_by("category__name", "title")
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user

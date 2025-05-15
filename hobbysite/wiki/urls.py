@@ -9,11 +9,7 @@ urlpatterns = [
     path("article/<int:pk>/", views.ArticleDetailView.as_view(), name="article_detail"),
     path("article/add/", views.ArticleCreateView.as_view(), name="article_create"),
     path("article/<int:pk>/edit/", views.ArticleUpdateView.as_view(), name="article_update"),
-]
-
-
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 app_name = "wiki"
